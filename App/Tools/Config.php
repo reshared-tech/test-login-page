@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Tools;
+class Config
+{
+    const database = [
+        'host' => '127.0.0.1',
+        'port' => 3306,
+        'dbname' => 'testdb',
+        'charset' => 'utf8mb4',
+        'username' => 'root',
+        'password' => '123123',
+    ];
+}
