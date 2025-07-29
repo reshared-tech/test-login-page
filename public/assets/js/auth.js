@@ -90,6 +90,17 @@ form.addEventListener('submit', function (e) {
         })
 });
 
+/**
+ * Clears error message for a given input field
+ * @param {HTMLInputElement} input - The input field to clear errors for
+ */
+function clearError(input) {
+    const errorField = document.querySelector(`.for-${input.name}`);
+    if (errorField) {
+        errorField.style.display = 'none';
+    }
+}
+
 if (nameInput) {
     nameInput.addEventListener()
 }
