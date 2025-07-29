@@ -22,6 +22,7 @@ class Language
             'Don\'t have an account?' => 'アカウントをお持ちでないですか？',
             'Sign up' => 'サインアップ',
             'Register a new account' => '新しいアカウントを登録',
+            'name' => '名前',
             'Name' => '名前',
             'Please input your name.' => '名前を入力してください',
             'Password' => 'パスワード',
@@ -38,9 +39,10 @@ class Language
             'Invalid email format' => 'メールアドレスの形式が正しくありません',
             'Email not registered. Please register first.' => 'このメールアドレスは登録されていません。まず登録してください。',
             'Account locked. Try again in 10 minutes.' => 'アカウントがロックされました。10分後に再度お試しください。',
-            'Please input \w' => '\wを入力してください',
-            '\w must be at least \d characters' => '\wは\d文字以上必要です',
-            '\w must be less than \d characters' => '\wは\d文字未満で入力してください',
+            'Please input %s' => '\wを入力してください',
+            'Password confirmation does not match.' => 'パスワードの確認が一致しません。',
+            '%s must be at least %d characters' => '%sは%d文字以上必要です',
+            '%s must be less than %d characters' => '%sは%d文字未満で入力してください',
         ],
     ];
 
@@ -51,8 +53,30 @@ class Language
 
     public static function show($text)
     {
+        if (is_numeric($text)) {
+            return $text;
+        }
+
         if (is_string($text)) {
-            return self::$config[$text] ?? $text;
+            if (isset(self::$config[$text])) {
+                return self::$config[$text];
+            }
+
+            foreach (self::$config as $k => $v) {
+                if (strpos($k, '%d') === false && strpos($k, '%w') === false) {
+                    continue;
+                }
+
+                $pattern = str_replace('%s', '(.+)', $k);
+                $pattern = str_replace('%d', '(\d+)', $pattern);
+                $pattern = '/^' . $pattern . '$/';
+
+                if (preg_match($pattern, $text, $matches)) {
+                    array_shift($matches);
+                    $result = self::show($matches);
+                    return vsprintf($v, $result);
+                }
+            }
         }
 
         foreach ($text as $k => $item) {
