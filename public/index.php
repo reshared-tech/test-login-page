@@ -4,7 +4,7 @@ define('APP_ROOT', dirname(__DIR__));
 spl_autoload_register(function ($class) {
     $path = str_replace('\\', DIRECTORY_SEPARATOR, $class);
 
-    require $path;
+    require APP_ROOT . '/' . $path . '.php';
 });
 
 function dd(...$vars)
@@ -17,4 +17,6 @@ function dd(...$vars)
     exit;
 }
 
-$controller = (new \App\Controllers\AuthController)->handle();
+\App\Tools\Language::setLang(\App\Tools\Language::JP);
+
+(new \App\Controllers\AuthController)->handle();

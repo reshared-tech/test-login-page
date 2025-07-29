@@ -9,3 +9,14 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_email` (`email`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `user_logs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `user_id` bigint(20) unsigned NOT NULL COMMENT 'user id',
+  `user_agent` varchar(255) NOT NULL COMMENT 'user agent',
+  `note` varchar(255) NOT NULL COMMENT 'some description',
+  `ip` varchar(255) NOT NULL COMMENT 'user ip address',
+  `created_at` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT 'log time',
+  PRIMARY KEY (`id`),
+  KEY `idx_uid` (`user_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

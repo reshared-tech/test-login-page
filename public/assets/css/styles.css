@@ -129,11 +129,6 @@ body {
     font-size: 0.875rem;
 }
 
-/* Registration-specific fields */
-.form .only-register {
-    display: none;
-}
-
 /* Responsive Styles */
 @media (max-width: 640px) {
     .card {

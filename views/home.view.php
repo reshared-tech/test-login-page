@@ -6,7 +6,7 @@
             <div class="header">
                 <h1 class="title">Welcome!</h1>
                 <p class="subtitle">Hi, <?= htmlspecialchars($_SESSION['user']['name']) ?></p>
-                <p><a href="/logout" class="link">Log out</a></p>
+                <p><a href="/?action=logout" class="link">Log out</a></p>
             </div>
         </div>
     </div>
