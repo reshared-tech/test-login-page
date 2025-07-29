@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Tools;
 class Config
 {
     const database = [

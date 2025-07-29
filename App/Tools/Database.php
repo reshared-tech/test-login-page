@@ -10,7 +10,7 @@ class Database
     public function __construct($refresh = false)
     {
         if (!self::$pdo || $refresh) {
-            $config = http_build_query(\Config::database, '', ';');
+            $config = http_build_query(\App\Tools\Config::database, '', ';');
             self::$pdo = new \PDO(
                 $config,
                 null,
