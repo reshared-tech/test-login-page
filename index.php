@@ -217,7 +217,7 @@ session_start();
                     <label for="confirm_password" class="label">Confirm password</label>
                     <input id="confirm_password" type="password" name="confirm_password" class="input"
                            placeholder="Please repeat your password.">
-                    <p class="tip for-confirm-password"></p>
+                    <p class="tip for-confirm_password"></p>
                 </div>
 
                 <button id="submit-btn" type="submit">Log in</button>
@@ -494,7 +494,7 @@ session_start();
      * Handles logout request
      */
     function handleLogout() {
-        fetch('auth.php')
+        fetch('/auth.php')
             .then(response => response.json())
             .then(response => {
                 if (response.code === 10000) {
