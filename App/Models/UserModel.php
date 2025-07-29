@@ -15,7 +15,7 @@ class UserModel extends BaseModel
 
     public function addUserLog($userId, $note)
     {
-        return $this->database->prepare('INSERT INTO `user_logs`(`user_id`, `user_agent`, `note`, `ip`, `created_at`) VALUES(:user_id, :user_agent, :note, :ip, created_at)', [
+        return $this->database->prepare('INSERT INTO `user_logs`(`user_id`, `user_agent`, `note`, `ip`, `created_at`) VALUES(:user_id, :user_agent, :note, :ip, :created_at)', [
             'user_id' => $userId,
             'user_agent' => Utils::getRequestAgent(),
             'ip' => Utils::getRequestIp(),

@@ -28,8 +28,14 @@ class Utils
                     $ip = trim($ip);
 
                     // verify IPv4 and IPv6
-                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-                        return $ip;
+                    if (filter_var($ip, FILTER_VALIDATE_IP)) {
+                        if ($ip === '127.0.0.1' || $ip === '::1') {
+                            return $ip;
+                        }
+
+                        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                            return $ip;
+                        }
                     }
                 }
             }
