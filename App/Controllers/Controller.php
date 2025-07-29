@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Tools\Language;
+
 abstract class Controller
 {
     protected $errors = [];
@@ -49,6 +51,9 @@ abstract class Controller
     protected function json($data)
     {
         header('Content-Type: application/json');
+
+        $data['message'] = Language::show($data['message']);
+
         exit(json_encode($data));
     }
 

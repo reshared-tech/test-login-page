@@ -30,6 +30,17 @@ class Language
             'Already have an account?' => 'すでにアカウントをお持ちですか？',
             'Login Page' => 'ログインページ',
             'Register Page' => '登録ページ',
+            'Registration failed. Please contact administrator.' => '',
+            'Registration successful.' => '登録が成功しました。',
+            'Email already registered. Please login.' => 'このメールアドレスは既に登録されています。ログインしてください。',
+            'Login successful' => 'ログイン成功',
+            'Incorrect password' => 'パスワードが間違っています',
+            'Invalid email format' => 'メールアドレスの形式が正しくありません',
+            'Email not registered. Please register first.' => 'このメールアドレスは登録されていません。まず登録してください。',
+            'Account locked. Try again in 10 minutes.' => 'アカウントがロックされました。10分後に再度お試しください。',
+            'Please input \w' => '\wを入力してください',
+            '\w must be at least \d characters' => '\wは\d文字以上必要です',
+            '\w must be less than \d characters' => '\wは\d文字未満で入力してください',
         ],
     ];
 
@@ -40,6 +51,14 @@ class Language
 
     public static function show($text)
     {
-        return self::$config[$text] ?? $text;
+        if (is_string($text)) {
+            return self::$config[$text] ?? $text;
+        }
+
+        foreach ($text as $k => $item) {
+            $text[$k] = self::show($item);
+        }
+
+        return $text;
     }
 }
