@@ -18,20 +18,24 @@ abstract class Controller
         try {
             call_user_func([$this, $action]);
         } catch (\Exception|\Throwable $e) {
-            $this->view(500, ['message' => $e->getMessage()]);
+            $this->json([
+                'code' => 10005,
+                'message' => $e->getMessage(),
+            ]);
         }
     }
 
-    protected function string($key, $min = 0, $max = 255)
+    protected function string($key, $min = 1, $max = 255)
     {
         $val = trim($_POST[$key]);
 
         $len = strlen($val);
 
-        if ($len <= $min) {
+        if ($len === 0) {
+            $this->errors[$key] = "Please input $key";
+        } elseif ($len < $min) {
             $this->errors[$key] = "$key must be at least $min characters";
-        }
-        if ($len > $max) {
+        } elseif ($len > $max) {
             $this->errors[$key] = "$key must be less than $max characters";
         }
 
@@ -65,8 +69,18 @@ abstract class Controller
         $_SESSION['user'] = $user;
     }
 
+    protected function isAuthorized()
+    {
+        return isset($_SESSION['user']);
+    }
+
     protected function removeAuth()
     {
         session_destroy();
+    }
+
+    protected function redirect($to = '/')
+    {
+        header('Location: ' . $to);
     }
 }

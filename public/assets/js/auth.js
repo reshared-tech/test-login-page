@@ -76,7 +76,7 @@ form.addEventListener('submit', function (e) {
     }).then(res => res.json())
         .then(res => {
             if (res.code === 10000) {
-                window.location.reload();
+                window.location.href = '/';
             } else {
                 if (typeof res.message === 'string') {
                     displayErrors([{field: 'email', message: res.message}]);
@@ -101,6 +101,8 @@ function clearError(input) {
     }
 }
 
-if (nameInput) {
-    nameInput.addEventListener()
-}
+[nameInput, emailInput, passwordInput, confirmPasswordInput].forEach(input => {
+    if (input) {
+        input.addEventListener('input', clearError.bind(null, input));
+    }
+});

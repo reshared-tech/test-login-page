@@ -8,12 +8,38 @@ class AuthController extends Controller
 {
     public function index()
     {
-        $this->view('login', [
-            'title' => 'Login Page'
-        ]);
+        if ($this->isAuthorized()) {
+            $this->view('home', [
+                'title' => 'Welcome'
+            ]);
+        } else {
+            $this->redirect('/?action=login');
+        }
     }
 
     public function login()
+    {
+        if ($this->isAuthorized()) {
+            $this->redirect();
+        } else {
+            $this->view('login', [
+                'title' => 'Login Page'
+            ]);
+        }
+    }
+
+    public function register()
+    {
+        if ($this->isAuthorized()) {
+            $this->redirect();
+        } else {
+            $this->view('register', [
+                'title' => 'Register Page'
+            ]);
+        }
+    }
+
+    public function loginSubmit()
     {
         $email = $this->string('email');
         $password = $this->string('password', 6, 200);
@@ -87,7 +113,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register()
+    public function registerSubmit()
     {
         $name = $this->string('name');
         $email = $this->string('email');
@@ -130,9 +156,6 @@ class AuthController extends Controller
         $this->removeAuth();
 
         // return message
-        $this->json([
-            'code' => 10000,
-            'message' => 'You have been logged out.',
-        ]);
+        $this->redirect();
     }
 }

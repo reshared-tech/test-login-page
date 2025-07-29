@@ -10,7 +10,7 @@ class UserModel extends BaseModel
     {
         return $this->database->prepare('SELECT * FROM `users` WHERE `email` = :email', [
             'email' => $email
-        ])->fetch();
+        ])->find();
     }
 
     public function addUserLog($userId, $note)

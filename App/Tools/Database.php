@@ -10,11 +10,11 @@ class Database
     public function __construct($refresh = false)
     {
         if (!self::$pdo || $refresh) {
-            $config = http_build_query(\App\Tools\Config::database, '', ';');
+            $config = Config::database;
             self::$pdo = new \PDO(
-                $config,
-                null,
-                null,
+                'mysql:' . http_build_query($config, '', ';'),
+                $config['username'],
+                $config['password'],
                 [
                     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
                     \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
@@ -25,17 +25,19 @@ class Database
 
     public function prepare($sql, $attributes = [])
     {
-        $this->stmt = self::$pdo->prepare($sql)->execute($attributes);
+        $this->stmt = self::$pdo->prepare($sql);
+
+        $this->stmt->execute($attributes);
 
         return $this;
     }
 
-    public function fetch()
+    public function find()
     {
         return $this->stmt->fetch();
     }
 
-    public function fetchAll()
+    public function findALl()
     {
         return $this->stmt->fetchAll();
     }

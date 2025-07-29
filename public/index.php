@@ -17,6 +17,11 @@ function dd(...$vars)
     exit;
 }
 
+function __($key)
+{
+    return \App\Tools\Language::show($key);
+}
+
 \App\Tools\Language::setLang(\App\Tools\Language::JP);
 
 (new \App\Controllers\AuthController)->handle();
