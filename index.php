@@ -1,4 +1,7 @@
-<?php session_start() ?>
+<?php
+// Start session for user authentication
+session_start();
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <style>
+        /* Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -14,12 +18,14 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+            Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background-color: #f1f5f9;
             color: #334155;
             line-height: 1.5;
         }
 
+        /* Layout Styles */
         .container {
             display: flex;
             justify-content: center;
@@ -31,12 +37,14 @@
         .card {
             background-color: #ffffff;
             border-radius: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+            0 4px 6px -4px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 28rem;
             padding: 2rem 1.5rem;
         }
 
+        /* Header Styles */
         .header {
             margin-bottom: 2rem;
             text-align: center;
@@ -49,6 +57,12 @@
             margin-bottom: 0.5rem;
         }
 
+        .subtitle {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        /* Form Styles */
         .form {
             display: flex;
             flex-direction: column;
@@ -81,12 +95,14 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
 
+        /* Error Message Styles */
         .tip {
             font-size: 0.75rem;
             color: #f77070;
             display: none;
         }
 
+        /* Button Styles */
         .form button {
             background-color: #3b82f6;
             color: #ffffff;
@@ -103,6 +119,7 @@
             background-color: #2563eb;
         }
 
+        /* Link Styles */
         .link {
             color: #3b82f6;
             text-decoration: none;
@@ -116,6 +133,7 @@
             text-decoration: underline;
         }
 
+        /* Footer Styles */
         .footer {
             margin-top: 1rem;
             text-align: center;
@@ -123,10 +141,12 @@
             font-size: 0.875rem;
         }
 
+        /* Registration-specific fields */
         .form .only-register {
             display: none;
         }
 
+        /* Responsive Styles */
         @media (max-width: 640px) {
             .card {
                 padding: 1.5rem 1rem;
@@ -154,253 +174,348 @@
 <div class="container">
     <div class="card">
         <?php if (isset($_SESSION['user'])): ?>
+            <!-- Logged-in state view -->
             <div class="header">
                 <h1 class="title">Welcome!</h1>
-                <p class="subtitle">Hi, <?= $_SESSION['user']['name'] ?></p>
+                <p class="subtitle">Hi, <?= htmlspecialchars($_SESSION['user']['name']) ?></p>
                 <p><a href="javascript:;" id="logout" class="link">Log out</a></p>
-                <p class="tip for-logout">some info</p>
+                <p class="tip for-logout"></p>
             </div>
         <?php else: ?>
+            <!-- Guest state view (login/register form) -->
             <div class="header">
-                <h1 class="title">Welcome Back</h1>
-                <p class="subtitle">Please log in your account</p>
+                <h1 class="title" id="form-title">Welcome Back</h1>
+                <p class="subtitle" id="form-subtitle">Please log in your account</p>
             </div>
 
-            <form class="form">
+            <form class="form" id="auth-form">
+                <!-- Registration-only fields (hidden by default) -->
                 <div class="only-register item">
                     <label for="name" class="label">Name</label>
                     <input id="name" type="text" name="name" class="input"
                            placeholder="Please input your name.">
-                    <p class="tip for-name">some info</p>
+                    <p class="tip for-name"></p>
                 </div>
 
+                <!-- Common fields -->
                 <div class="item">
                     <label for="email" class="label">Email address</label>
                     <input id="email" type="email" name="email" class="input"
-                           placeholder="Please input your email address.">
-                    <p class="tip for-email">some info</p>
+                           placeholder="Please input your email address." required>
+                    <p class="tip for-email"></p>
                 </div>
 
                 <div class="item">
                     <label for="password" class="label">Password</label>
                     <input id="password" type="password" name="password" class="input"
-                           placeholder="Please input your password.">
-                    <p class="tip for-password">some info</p>
+                           placeholder="Please input your password." required minlength="6">
+                    <p class="tip for-password"></p>
                 </div>
 
+                <!-- Registration-only fields (hidden by default) -->
                 <div class="only-register item">
                     <label for="confirm_password" class="label">Confirm password</label>
                     <input id="confirm_password" type="password" name="confirm_password" class="input"
                            placeholder="Please repeat your password.">
-                    <p class="tip for-confirm-password">some info</p>
+                    <p class="tip for-confirm-password"></p>
                 </div>
 
-                <button id="button" type="submit">Log in</button>
+                <button id="submit-btn" type="submit">Log in</button>
 
                 <div class="footer">
-                    <p><span class="footer-info">Don't have an account?</span> <a href="javascript:;" id="register"
-                                                                                  class="link">Sign up</a></p>
+                    <p><span id="footer-info">Don't have an account?</span>
+                        <a href="javascript:;" id="toggle-form" class="link">Sign up</a></p>
                 </div>
             </form>
         <?php endif ?>
     </div>
 </div>
-<?php if (empty($_SESSION['user'])): ?>
-    <script>
-        const texts = {
-            isLogin: true,
-            login: {
-                title: 'Welcome Back',
-                subtitle: 'Please log in your account',
-                footerInfo: 'Don\'t have an account?',
-                link: 'Sign up',
-                submit: 'Log in',
-            },
-            register: {
-                title: 'Welcome',
-                subtitle: 'Register a new account',
-                footerInfo: 'Already have an account?',
-                link: 'Log in',
-                submit: 'Sign up',
-            },
-        };
 
-        const name = document.getElementById('name');
-        const email = document.getElementById('email');
-        const password = document.getElementById('password');
-        const confirmPassword = document.getElementById('confirm_password');
+<script>
+    /**
+     * Authentication Form Handler
+     * Manages login/registration form toggling and submission
+     */
 
-        name.addEventListener('input', function () {
-            document.getElementsByClassName('for-name').item(0).style.display = 'none';
-        });
-        email.addEventListener('input', function () {
-            document.getElementsByClassName('for-email').item(0).style.display = 'none';
-        });
-        password.addEventListener('input', function () {
-            document.getElementsByClassName('for-password').item(0).style.display = 'none';
-        });
-        confirmPassword.addEventListener('input', function () {
-            document.getElementsByClassName('for-confirm-password').item(0).style.display = 'none';
-        });
+// Configuration for text content
+    const FORM_TEXTS = {
+        login: {
+            title: 'Welcome Back',
+            subtitle: 'Please log in your account',
+            footerInfo: 'Don\'t have an account?',
+            link: 'Sign up',
+            submit: 'Log in',
+        },
+        register: {
+            title: 'Welcome',
+            subtitle: 'Register a new account',
+            footerInfo: 'Already have an account?',
+            link: 'Log in',
+            submit: 'Sign up',
+        }
+    };
 
-        document.getElementById('register').addEventListener('click', function (e) {
-            const text = texts.isLogin ? texts.register : texts.login;
-            name.value = '';
-            email.value = '';
-            password.value = '';
-            confirmPassword.value = '';
+    // DOM Elements
+    const authForm = document.getElementById('auth-form');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm_password');
+    const registerFields = document.querySelectorAll('.only-register');
+    const toggleFormBtn = document.getElementById('toggle-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const formTitle = document.getElementById('form-title');
+    const formSubtitle = document.getElementById('form-subtitle');
+    const footerInfo = document.getElementById('footer-info');
+    const logoutBtn = document.getElementById('logout');
 
-            if (texts.isLogin) {
-                const dom = document.getElementsByClassName('only-register')
-                for (let i in dom) {
-                    dom.item(i).style.display = 'flex';
-                }
-            } else {
-                const dom = document.getElementsByClassName('only-register')
-                for (let i in dom) {
-                    dom.item(i).style.display = 'none';
-                }
-            }
+    // State tracking
+    let isLoginForm = true;
 
-            texts.isLogin = !texts.isLogin;
-            document.getElementById('button').innerText = text.submit;
-            document.getElementsByClassName('title').item(0).innerText = text.title;
-            document.getElementsByClassName('subtitle').item(0).innerText = text.subtitle;
-            document.getElementsByClassName('footer-info').item(0).innerHTML = text.footerInfo;
-            e.target.innerText = text.link;
-        });
+    // Initialize form
+    if (authForm) {
+        setupEventListeners();
+    } else if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+    }
 
-        document.getElementsByTagName('form').item(0).addEventListener('submit', function (e) {
-            e.preventDefault();
-            // login
-            if (texts.isLogin) {
-                whenLogin();
-            } else {
-                whenRegister();
+    /**
+     * Sets up all event listeners for the form
+     */
+    function setupEventListeners() {
+        // Input validation listeners
+        [nameInput, emailInput, passwordInput, confirmPasswordInput].forEach(input => {
+            if (input) {
+                input.addEventListener('input', clearError.bind(null, input));
             }
         });
 
-        function whenLogin() {
-            let error = false;
-
-            if (email.value.trim() === '') {
-                const tip = document.getElementsByClassName('for-email').item(0);
-                tip.style.display = 'block';
-                tip.innerText = 'Please input your email address.';
-                error = true;
-            }
-
-            if (password.value.trim() === '') {
-                const tip = document.getElementsByClassName('for-password').item(0);
-                tip.style.display = 'block';
-                tip.innerText = 'Please input your password.';
-                error = true;
-            }
-
-            if (password.value.length < 6) {
-                const tip = document.getElementsByClassName('for-password').item(0);
-                tip.style.display = 'block';
-                tip.innerText = 'The password field must be at least 6 characters.';
-                error = true;
-            }
-
-            if (error) {
-                return;
-            }
-
-            const fd = new FormData();
-            fd.append('email', email.value);
-            fd.append('password', password.value.trim());
-            fetch('/auth.php', {
-                method: 'POST',
-                body: fd,
-            }).then(res => res.json())
-                .then(res => {
-                    if (res.code === 10000) {
-                        window.location.reload();
-                    } else {
-                        const tip = document.getElementsByClassName('for-email').item(0);
-                        tip.style.display = 'block';
-                        tip.innerText = res.msg ? res.msg : 'something wrong';
-                    }
-                });
+        // Form toggle listener
+        if (toggleFormBtn) {
+            toggleFormBtn.addEventListener('click', toggleForm);
         }
 
-        function whenRegister() {
-            let error = false;
-
-            if (name.value.trim() === '') {
-                const tip = document.getElementsByClassName('for-name').item(0);
-                tip.style.display = 'block';
-                tip.innerText = 'Please input your name.';
-                error = true;
-            }
-
-            if (email.value.trim() === '') {
-                const tip = document.getElementsByClassName('for-email').item(0);
-                tip.style.display = 'block';
-                tip.innerText = 'Please input your email address.';
-                error = true;
-            }
-
-            if (password.value.trim() === '') {
-                const tip = document.getElementsByClassName('for-password').item(0);
-                tip.style.display = 'block';
-                tip.innerText = 'Please input your password.';
-                error = true;
-            }
-
-            if (password.value.length < 6) {
-                const tip = document.getElementsByClassName('for-password').item(0);
-                tip.style.display = 'block';
-                tip.innerText = 'The password field must be at least 6 characters.';
-                error = true;
-            }
-
-            if (confirmPassword.value !== password.value) {
-                const tip = document.getElementsByClassName('for-confirm-password').item(0);
-                tip.style.display = 'block';
-                tip.innerText = 'The password field confirmation does not match.';
-                error = true;
-            }
-
-            if (error) {
-                return;
-            }
-
-            const fd = new FormData();
-            fd.append('name', name.value);
-            fd.append('email', email.value);
-            fd.append('password', password.value.trim());
-            fetch('/auth.php', {
-                method: 'POST',
-                body: fd,
-            }).then(res => res.json())
-                .then(res => {
-                    if (res.code === 10000) {
-                        window.location.reload();
-                    } else {
-                        const tip = document.getElementsByClassName('for-email').item(0);
-                        tip.style.display = 'block';
-                        tip.innerText = res.msg ? res.msg : 'something wrong';
-                    }
-                });
+        // Form submission listener
+        if (authForm) {
+            authForm.addEventListener('submit', handleFormSubmit);
         }
-    </script>
-<?php else: ?>
-    <script>
-        document.getElementById('logout').addEventListener('click', function () {
-            fetch('auth.php').then(res => res.json()).then(res => {
-                if (res.code === 10000) {
+    }
+
+    /**
+     * Clears error message for a given input field
+     * @param {HTMLInputElement} input - The input field to clear errors for
+     */
+    function clearError(input) {
+        const errorField = document.querySelector(`.for-${input.name}`);
+        if (errorField) {
+            errorField.style.display = 'none';
+        }
+    }
+
+    /**
+     * Toggles between login and registration forms
+     */
+    function toggleForm() {
+        isLoginForm = !isLoginForm;
+        const texts = isLoginForm ? FORM_TEXTS.login : FORM_TEXTS.register;
+
+        // Update form text content
+        formTitle.textContent = texts.title;
+        formSubtitle.textContent = texts.subtitle;
+        footerInfo.textContent = texts.footerInfo;
+        toggleFormBtn.textContent = texts.link;
+        submitBtn.textContent = texts.submit;
+
+        // Toggle registration fields
+        registerFields.forEach(field => {
+            field.style.display = isLoginForm ? 'none' : 'flex';
+        });
+
+        // Clear form values
+        if (nameInput) nameInput.value = '';
+        if (confirmPasswordInput) confirmPasswordInput.value = '';
+        if (emailInput) emailInput.value = '';
+        if (passwordInput) passwordInput.value = '';
+    }
+
+    /**
+     * Handles form submission (both login and registration)
+     * @param {Event} e - The submit event
+     */
+    function handleFormSubmit(e) {
+        e.preventDefault();
+
+        if (isLoginForm) {
+            handleLogin();
+        } else {
+            handleRegistration();
+        }
+    }
+
+    /**
+     * Validates and processes login form submission
+     */
+    function handleLogin() {
+        const errors = validateLoginForm();
+
+        if (errors.length > 0) {
+            displayErrors(errors);
+            return;
+        }
+
+        submitForm({
+            email: emailInput.value.trim(),
+            password: passwordInput.value.trim()
+        });
+    }
+
+    /**
+     * Validates and processes registration form submission
+     */
+    function handleRegistration() {
+        const errors = validateRegistrationForm();
+
+        if (errors.length > 0) {
+            displayErrors(errors);
+            return;
+        }
+
+        submitForm({
+            name: nameInput.value.trim(),
+            email: emailInput.value.trim(),
+            password: passwordInput.value.trim()
+        });
+    }
+
+    /**
+     * Validates login form fields
+     * @returns {Array} Array of error messages
+     */
+    function validateLoginForm() {
+        const errors = [];
+
+        if (!emailInput.value.trim()) {
+            errors.push({ field: 'email', message: 'Please input your email address.' });
+        }
+
+        if (!passwordInput.value.trim()) {
+            errors.push({ field: 'password', message: 'Please input your password.' });
+        } else if (passwordInput.value.length < 6) {
+            errors.push({ field: 'password', message: 'Password must be at least 6 characters.' });
+        }
+
+        return errors;
+    }
+
+    /**
+     * Validates registration form fields
+     * @returns {Array} Array of error messages
+     */
+    function validateRegistrationForm() {
+        const errors = validateLoginForm(); // Includes email/password validation
+
+        if (!nameInput.value.trim()) {
+            errors.push({ field: 'name', message: 'Please input your name.' });
+        }
+
+        if (passwordInput.value !== confirmPasswordInput.value) {
+            errors.push({
+                field: 'confirm_password',
+                message: 'Password confirmation does not match.'
+            });
+        }
+
+        return errors;
+    }
+
+    /**
+     * Displays validation errors on the form
+     * @param {Array} errors - Array of error objects
+     */
+    function displayErrors(errors) {
+        errors.forEach(error => {
+            const errorField = document.querySelector(`.for-${error.field}`);
+            if (errorField) {
+                errorField.textContent = error.message;
+                errorField.style.display = 'block';
+            }
+        });
+    }
+
+    /**
+     * Submits form data to the server
+     * @param {Object} data - Form data to submit
+     */
+    function submitForm(data) {
+        const formData = new FormData();
+        Object.entries(data).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
+
+        fetch('/auth.php', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(handleResponse)
+            .catch(handleError);
+    }
+
+    /**
+     * Handles server response
+     * @param {Object} response - Server response
+     */
+    function handleResponse(response) {
+        if (response.code === 10000) {
+            window.location.reload();
+        } else {
+            const errorField = document.querySelector('.for-email');
+            if (errorField) {
+                errorField.textContent = response.msg || 'Something went wrong. Please try again.';
+                errorField.style.display = 'block';
+            }
+        }
+    }
+
+    /**
+     * Handles fetch errors
+     * @param {Error} error - The error object
+     */
+    function handleError(error) {
+        console.error('Error:', error);
+        const errorField = document.querySelector('.for-email');
+        if (errorField) {
+            errorField.textContent = 'Network error. Please try again.';
+            errorField.style.display = 'block';
+        }
+    }
+
+    /**
+     * Handles logout request
+     */
+    function handleLogout() {
+        fetch('auth.php')
+            .then(response => response.json())
+            .then(response => {
+                if (response.code === 10000) {
                     window.location.reload();
                 } else {
-                    const tip = document.getElementsByClassName('for-logout').item(0);
-                    tip.style.display = 'block';
-                    tip.innerText = res.msg ? res.msg : 'something wrong';
+                    const errorField = document.querySelector('.for-logout');
+                    if (errorField) {
+                        errorField.textContent = response.msg || 'Logout failed. Please try again.';
+                        errorField.style.display = 'block';
+                    }
                 }
             })
-        })
-    </script>
-<?php endif ?>
+            .catch(error => {
+                console.error('Logout error:', error);
+                const errorField = document.querySelector('.for-logout');
+                if (errorField) {
+                    errorField.textContent = 'Network error. Please try again.';
+                    errorField.style.display = 'block';
+                }
+            });
+    }
+</script>
 </body>
 </html>
