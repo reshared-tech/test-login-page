@@ -28,6 +28,10 @@ body {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -4px rgba(0, 0, 0, 0.1);
     width: 100%;
+    padding: 1rem;
+}
+
+.auth-card {
     max-width: 28rem;
     padding: 2rem 1.5rem;
 }
@@ -127,6 +131,29 @@ body {
     text-align: center;
     color: #64748b;
     font-size: 0.875rem;
+}
+
+.table {
+    width: 100%;
+    border-radius: 1rem;
+    border: 1px solid #cbd5e1;
+    padding: .4rem 1rem;
+}
+
+.table th {
+    text-align: left;
+}
+
+.table th, .table td {
+    line-height: 2rem;
+}
+
+.table-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-weight: bolder;
+    padding-bottom: .8rem;
 }
 
 /* Responsive Styles */

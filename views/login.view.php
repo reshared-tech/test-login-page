@@ -1,13 +1,13 @@
 <?php require APP_ROOT . '/views/basic/head.view.php' ?>
 
     <div class="container">
-        <div class="card">
+        <div class="card auth-card">
             <div class="header">
                 <h1 class="title" id="form-title"><?= __('Welcome Back') ?></h1>
                 <p class="subtitle" id="form-subtitle"><?= __('Please log in your account') ?></p>
             </div>
 
-            <form class="form" id="form" method="post" action="/?action=loginSubmit">
+            <form class="form" id="form" method="post" action="/auth/loginSubmit">
                 <div class="item">
                     <label for="email" class="label"><?= __('Email address') ?></label>
                     <input id="email" type="email" name="email" class="input"
@@ -25,7 +25,7 @@
                 <button id="submit-btn" type="submit"><?= __('Log in') ?></button>
 
                 <div class="footer">
-                    <p><?= __('Don\'t have an account?') ?> <a href="/?action=register" class="link"><?= __('Sign up') ?></a></p>
+                    <p><?= __('Don\'t have an account?') ?> <a href="/auth/register" class="link"><?= __('Sign up') ?></a></p>
                 </div>
             </form>
         </div>

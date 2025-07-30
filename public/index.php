@@ -22,6 +22,8 @@ function __($key)
     return \App\Tools\Language::show($key);
 }
 
-\App\Tools\Language::setLang(\App\Tools\Language::JP);
-
-(new \App\Controllers\AuthController)->handle();
+$path = explode('/', parse_url($_SERVER['REQUEST_URI'])['path']);
+$controller = $path[1] ? ucfirst($path[1]) : 'Home';
+$class = '\App\Controllers\\' . $controller . 'Controller';
+$instance = class_exists($class) ? new $class() : new \App\Controllers\HomeController();
+$instance->handle($path[2] ?? 'index');

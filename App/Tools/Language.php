@@ -62,6 +62,10 @@ class Language
                 return self::$config[$text];
             }
 
+            if (empty(self::$config)) {
+                return $text;
+            }
+
             foreach (self::$config as $k => $v) {
                 if (strpos($k, '%d') === false && strpos($k, '%w') === false) {
                     continue;
@@ -77,6 +81,8 @@ class Language
                     return vsprintf($v, $result);
                 }
             }
+
+            return $text;
         }
 
         foreach ($text as $k => $item) {

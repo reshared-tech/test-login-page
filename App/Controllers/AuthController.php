@@ -8,35 +8,35 @@ class AuthController extends Controller
 {
     public function index()
     {
-        if ($this->isAuthorized()) {
-            $this->view('home', [
-                'title' => 'Welcome'
-            ]);
-        } else {
-            $this->redirect('/?action=login');
-        }
+        // Check the user login information
+        $this->checkAuth();
+
+        // Show the home page
+        $this->view('home', [
+            'title' => 'Welcome'
+        ]);
     }
 
     public function login()
     {
-        if ($this->isAuthorized()) {
-            $this->redirect();
-        } else {
-            $this->view('login', [
-                'title' => 'Login Page'
-            ]);
-        }
+        // Only unlogged-in users are allowed to log in
+        $this->checkGuest();
+
+        // Show the login page
+        $this->view('login', [
+            'title' => 'Login Page'
+        ]);
     }
 
     public function register()
     {
-        if ($this->isAuthorized()) {
-            $this->redirect();
-        } else {
-            $this->view('register', [
-                'title' => 'Register Page'
-            ]);
-        }
+        // Only unlogged-in users are allowed to register
+        $this->checkGuest();
+
+        // Show the register page
+        $this->view('register', [
+            'title' => 'Register Page'
+        ]);
     }
 
     public function loginSubmit()

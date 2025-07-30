@@ -11,12 +11,12 @@ abstract class Controller
     public function __construct()
     {
         session_start();
+
+//        Language::setLang(Language::JP);
     }
 
-    public function handle()
+    public function handle($action)
     {
-        $action = $_GET['action'] ?? 'index';
-
         try {
             call_user_func([$this, $action]);
         } catch (\Exception|\Throwable $e) {
@@ -46,6 +46,14 @@ abstract class Controller
         }
 
         return $val;
+    }
+
+    protected function number($key, $default = null)
+    {
+        if (isset($_GET[$key])) {
+            return (int)$_GET[$key];
+        }
+        return $default;
     }
 
     protected function json($data)
@@ -87,5 +95,20 @@ abstract class Controller
     protected function redirect($to = '/')
     {
         header('Location: ' . $to);
+        exit;
+    }
+
+    protected function checkAuth()
+    {
+        if (!$this->isAuthorized()) {
+            $this->redirect('/auth/login');
+        }
+    }
+
+    protected function checkGuest()
+    {
+        if ($this->isAuthorized()) {
+            $this->redirect($_SERVER['HTTP_REFERER'] ?: '/');
+        }
     }
 }
