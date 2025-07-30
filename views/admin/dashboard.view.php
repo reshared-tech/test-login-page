@@ -48,6 +48,7 @@
                         <td><?= htmlspecialchars($user['name']) ?></td>
                         <td><?= $user['email'] ?></td>
                         <td><?= $user['created_at'] ?></td>
+                        <td><a href=""><?= __('Chat') ?></a></td>
                     </tr>
                 <?php endforeach ?>
                 </tbody>
