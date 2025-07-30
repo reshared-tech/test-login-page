@@ -45,3 +45,8 @@
             - styles.css  `All style definitions`
 - table.sql  `Database schema SQL file`
 - readme.md  `Project documentation`
+
+### about administrator
+> Administrators also have independent tables for storage, but for the convenience of testing, you can log in with the account 'admin' and the password 'admin', which is hardcoded in the code.
+> 
+> After entering the administrator list, you can subsequently add an administrator management module. At that time, you can perform operations such as "viewing", "adding", and "restricting" on administrators
