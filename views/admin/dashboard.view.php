@@ -3,17 +3,11 @@
 <div style="display: flex; padding: 1.2rem 2rem;background-color:white;justify-content: space-between;align-items: center">
     <span><?= __('Users list') ?></span>
 
-    <?php if (isset($_SESSION['user'])): ?>
+    <?php if (\Tools\Auth::isAuthorized()): ?>
         <span>
-            <?= __('Hi') ?>,
-            <?= htmlspecialchars($_SESSION['user']['name']) ?>,
-            <a href="/auth/logout" class="link"><?= __('Log out') ?></a>
-        </span>
-    <?php else: ?>
-        <span>
-            <?= __('Hi') ?>,
-            Guest,
-            <a href="/auth/login" class="link"><?= __('Log in') ?></a>
+            <?= __('Hi manager') ?>,
+            <?= htmlspecialchars(\Tools\Auth::user('name')) ?>,
+            <a href="/admin/logout" class="link"><?= __('Log out') ?></a>
         </span>
     <?php endif ?>
 </div>

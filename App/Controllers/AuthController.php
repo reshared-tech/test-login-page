@@ -3,27 +3,17 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use Tools\Auth;
 
 class AuthController extends Controller
 {
-    public function index()
-    {
-        // Check the user login information
-        $this->checkAuth();
-
-        // Show the home page
-        $this->view('home', [
-            'title' => 'Welcome'
-        ]);
-    }
-
     public function login()
     {
         // Only unlogged-in users are allowed to log in
-        $this->checkGuest();
+        Auth::checkGuest();
 
         // Show the login page
-        $this->view('login', [
+        view('login', [
             'title' => 'Login Page'
         ]);
     }
@@ -31,32 +21,23 @@ class AuthController extends Controller
     public function register()
     {
         // Only unlogged-in users are allowed to register
-        $this->checkGuest();
+        Auth::checkGuest();
 
         // Show the register page
-        $this->view('register', [
+        view('register', [
             'title' => 'Register Page'
         ]);
     }
 
     public function loginSubmit()
     {
-        $email = $this->string('email');
-        $password = $this->string('password', 6, 200);
+        $email = $this->validator->email($_POST, 'email');
+        $password = $this->validator->string($_POST, 'password', 6, 200);
 
-        if ($this->hasError()) {
-            $this->json([
+        if ($this->validator->hasError()) {
+            json([
                 'code' => 10001,
-                'message' => $this->errors,
-            ]);
-        }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->json([
-                'code' => 10001,
-                'message' => [
-                    'email' => 'Invalid email format',
-                ],
+                'message' => $this->validator->errors(),
             ]);
         }
 
@@ -65,7 +46,7 @@ class AuthController extends Controller
         $user = $userModel->getUserByEmail($email);
 
         if (!$user) {
-            $this->json([
+            json([
                 'code' => 10003,
                 'message' => 'Email not registered. Please register first.',
             ]);
@@ -73,7 +54,7 @@ class AuthController extends Controller
 
         // Check account lock status
         if ($user['failed_count'] >= 10 && time() - strtotime($user['updated_at']) < 600) {
-            $this->json([
+            json([
                 'code' => 10004,
                 'message' => 'Account locked. Try again in 10 minutes.',
             ]);
@@ -89,7 +70,7 @@ class AuthController extends Controller
             // Increment failed attempt counter
             $userModel->incrementFailedCount($user['id']);
 
-            $this->json([
+            json([
                 'code' => 10003,
                 'message' => 'Incorrect password',
             ]);
@@ -100,14 +81,16 @@ class AuthController extends Controller
             $userModel->cleanFailedCount($user['id']);
         }
 
+        $userModel->addUserLog($user['id'], 'user log in');
+
         // Set session and return success
-        $this->addAuth([
+        Auth::addAuth([
             'id' => $user['id'],
             'name' => $user['name'],
             'email' => $user['email'],
         ]);
 
-        $this->json([
+        json([
             'code' => 10000,
             'message' => 'Login successful',
         ]);
@@ -115,15 +98,15 @@ class AuthController extends Controller
 
     public function registerSubmit()
     {
-        $name = $this->string('name');
-        $email = $this->string('email');
-        $password = $this->string('password', 6, 200);
+        $name = $this->validator->string($_POST, 'name');
+        $email = $this->validator->email($_POST, 'email');
+        $password = $this->validator->string($_POST, 'password', 6, 200);
 
         // Check for existing email
         $userModel = new UserModel();
 
         if ($userModel->getUserByEmail($email)) {
-            $this->json([
+            json([
                 'code' => 10002,
                 'message' => 'Email already registered. Please login.',
             ]);
@@ -132,19 +115,19 @@ class AuthController extends Controller
         // Create new user
         $id = $userModel->addUser($name, $email, $password);
         if ($id) {
-            $this->addAuth([
+            Auth::addAuth([
                 'id' => $id,
                 'name' => $name,
                 'email' => $email,
             ]);
 
-            $this->json([
+            json([
                 'code' => 10000,
                 'message' => 'Registration successful.',
             ]);
         }
 
-        $this->json([
+        json([
             'code' => 10002,
             'message' => 'Registration failed. Please contact administrator.',
         ]);
@@ -153,9 +136,9 @@ class AuthController extends Controller
     public function logout()
     {
         // remove session
-        $this->removeAuth();
+        Auth::removeAuth();
 
         // return message
-        $this->redirect();
+        redirect();
     }
 }

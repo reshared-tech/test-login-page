@@ -1,13 +1,13 @@
 <?php require APP_ROOT . '/views/basic/head.view.php' ?>
 
     <div class="container">
-        <div class="card auth-card">
+        <div class="card mini-card">
             <div class="header">
                 <h1 class="title" id="form-title"><?= __('Welcome') ?></h1>
                 <p class="subtitle" id="form-subtitle"><?= __('Register a new account') ?></p>
             </div>
 
-            <form class="form" id="form" method="post" action="/auth/registerSubmit">
+            <form class="form" id="form" method="post" action="/register">
                 <div class="item">
                     <label for="name" class="label"><?= __('Name') ?></label>
                     <input id="name" type="text" name="name" class="input"
@@ -39,7 +39,7 @@
                 <button id="submit-btn" type="submit"><?= __('Sign up') ?></button>
 
                 <div class="footer">
-                    <p><?= __('Already have an account?') ?> <a href="/auth/login" class="link"><?= __('Log in') ?></a></p>
+                    <p><?= __('Already have an account?') ?> <a href="/login" class="link"><?= __('Log in') ?></a></p>
                 </div>
             </form>
         </div>

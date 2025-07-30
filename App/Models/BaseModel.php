@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Tools\Database;
+use Tools\Database;
 
 abstract class BaseModel
 {

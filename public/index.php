@@ -7,23 +7,20 @@ spl_autoload_register(function ($class) {
     require APP_ROOT . '/' . $path . '.php';
 });
 
-function dd(...$vars)
-{
-    echo '<pre>';
-    foreach ($vars as $var) {
-        var_dump($var);
-    }
-    echo '</pre>';
-    exit;
-}
+// Some functions
+require APP_ROOT . '/functions.php';
 
-function __($key)
-{
-    return \App\Tools\Language::show($key);
-}
+// Create router instance
+$router = new Tools\Router();
 
-$path = explode('/', parse_url($_SERVER['REQUEST_URI'])['path']);
-$controller = $path[1] ? ucfirst($path[1]) : 'Home';
-$class = '\App\Controllers\\' . $controller . 'Controller';
-$instance = class_exists($class) ? new $class() : new \App\Controllers\HomeController();
-$instance->handle($path[2] ?? 'index');
+// Add routes
+$router->get('/', [\App\Controllers\HomeController::class, 'index']);
+$router->get('/login', [\App\Controllers\AuthController::class, 'login']);
+$router->post('/login', [\App\Controllers\AuthController::class, 'loginSubmit']);
+$router->get('/register', [\App\Controllers\AuthController::class, 'register']);
+$router->post('/register', [\App\Controllers\AuthController::class, 'registerSubmit']);
+$router->get('/logout', [\App\Controllers\AuthController::class, 'logout']);
+
+$router->get('/admin/dashboard', [\Admin\Controllers\DashboardController::class, 'index']);
+
+$router->dispatch();

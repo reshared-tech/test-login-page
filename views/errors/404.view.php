@@ -4,9 +4,9 @@
         <div class="card mini-card">
             <!-- Logged-in state view -->
             <div class="header">
-                <h1 class="title"><?= __('Welcome') ?></h1>
-                <p class="subtitle"><?= __('Hi') ?>, <?= htmlspecialchars(\Tools\Auth::user('name')) ?></p>
-                <p><a href="/logout" class="link"><?= __('Log out') ?></a></p>
+                <h1 class="title">404</h1>
+                <p class="subtitle"><?= __('Oops, 404') ?></p>
+                <p><a href="/" class="link"><?= __('Go Home') ?></a></p>
             </div>
         </div>
     </div>

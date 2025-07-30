@@ -1,16 +1,21 @@
 <?php
 
-namespace App\Controllers;
+namespace Admin\Controllers;
 
+use Tools\Auth;
 use Tools\Validator;
 
-abstract class Controller
+class Controller
 {
     protected $validator;
 
     public function __construct()
     {
         session_start();
+
+        Auth::name('admin');
+
+        Auth::checkAuth();
 
         $this->validator = new Validator();
     }
