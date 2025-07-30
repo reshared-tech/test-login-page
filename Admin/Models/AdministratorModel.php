@@ -6,10 +6,10 @@ class AdministratorModel extends BaseModel
 {
     protected $table = 'administrators';
 
-    public function getByEmail($email)
+    public function getByName($name)
     {
-        return $this->database->prepare("SELECT * FROM `{$this->table}` WHERE `email` = :email", [
-            'email' => $email
+        return $this->database->prepare("SELECT * FROM `{$this->table}` WHERE `name` = :name", [
+            'name' => $name
         ])->find();
     }
 }
