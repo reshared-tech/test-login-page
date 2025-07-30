@@ -1,11 +1,31 @@
-# login page 
+# Test Login Page Project Structure
 
-## start
-
-## front end done
-
-## back end done
-
-## some test done
-
-# end
+## Code Structure
+- App `Business application logic code`
+  - Controllers `Controller layer code`
+    - Controller.php    `Abstract controller with common method implementations`
+    - AuthController.php  `Auth-related controller logic (login, logout, registration)`
+  - Models  `Model layer code`
+    - BaseModel.php  `Abstract Model with common method implementations`
+    - UserModel.php  `User-related Model methods (database operations)`
+  - Tools  `Utility classes`
+    - Config.php  `Project configuration class (static properties). Access via Config::database etc.`
+    - Database.php  `Database class wrapper (PDO singleton and common method implementations)`
+    - Language.php  `Multi-language configuration. Configure language mappings (English as key) and set language in index.php entry point`
+    - Utils.php  `Utility class (currently includes IP address and UserAgent retrieval methods)`
+- public  `Public directory (web root)`
+  - index.php  `Application entry point (request routing, function declarations, language setup, business logic invocation)`
+  - assets  `Static files (js+css+img)`
+    - js  `JavaScript files`
+      - auth.js  `Auth-related JavaScript logic`
+    - css  `CSS files`
+      - styles.css  `All style definitions`
+- views  `Frontend code`
+  - basic  `Common frontend components`
+    - head.view.php  `Common header template`
+    - foot.view.php  `Common footer template`
+  - home.view.php  `Home page template (after login)`
+  - login.view.php  `Login page template`
+  - register.view.php  `Registration page template`
+- table.sql  `Database schema SQL file`
+- readme.md  `Project documentation`
