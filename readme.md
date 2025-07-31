@@ -7,6 +7,10 @@
         - Controller.php    `Abstract controller with common method implementations`
         - DashboardController `Dashboard Page Controller Layer`
         - ChatController.php `Chat Page Controlle Layer`
+    - Models `Model layer code`
+      - BaseModel.php `Abstract Model with common method implementations`
+      - AdministratorModel.php `Model layer related to administrators`
+      - ChatModel.php `Model layer related to the administrator operation chat`
 - App `Business application logic code`
     - Controllers `Controller layer code`
         - Controller.php    `Abstract controller with common method implementations`
@@ -15,6 +19,7 @@
     - Models  `Model layer code`
         - BaseModel.php  `Abstract Model with common method implementations`
         - UserModel.php  `User-related Model methods (database operations)`
+        - ChatModel.php ``
 - Tools  `Utility classes`
     - Auth.php  `Permission Verification Related Method Encapsulation`
     - Config.ini.php
@@ -44,6 +49,8 @@
     - assets
         - js  `JavaScript files`
             - auth.js  `Auth-related JavaScript logic`
+            - chat.js  `Initiate new chat related js, for admin interface logic`
+            - chat_user.js  `Get conversation list related js, for user interface chat interaction`
         - css  `CSS files`
             - styles.css  `All style definitions`
 - table.sql  `Database schema SQL file`
