@@ -18,8 +18,7 @@ class DashboardController extends Controller
         $total = $userModel->getUserTotal();
         $users = $userModel->getUserList($page, $size);
 
-        $pre = $page == 1 ? 0 : $page - 1;
-        $next = $page == ceil($total / $size) ? 0 : $page + 1;
+        [$pre, $next, $pages] = $this->pages($total, $page, $size);
 
         // Show the page
         view('admin.dashboard', [
@@ -30,6 +29,7 @@ class DashboardController extends Controller
             'size' => $size,
             'pre' => $pre,
             'next' => $next,
+            'pages' => $pages,
         ]);
     }
 }

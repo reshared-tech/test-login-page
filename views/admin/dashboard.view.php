@@ -18,18 +18,6 @@
         </div>
 
         <div class="content">
-            <div class="table-header">
-                <span>Total: <?= $total ?></span>
-                <span>Per page: <?= $size ?></span>
-                <span>Current Page: <?= $page ?></span>
-                <?php if ($pre): ?>
-                    <a href="/?page=<?= $pre ?>" class="link">Preview page</a>
-                <?php endif ?>
-                <?php if ($next): ?>
-                    <a href="/?page=<?= $next ?>" class="link">Next page</a>
-                <?php endif ?>
-            </div>
-
             <div class="table-container">
                 <table class="table">
                     <thead>
@@ -57,6 +45,30 @@
                     <?php endforeach ?>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="pagination">
+                <span class="text">Per: (<?= $size ?>)</span>
+                <span class="text">Total: <?= $total ?></span>
+                <a class="nav-btn <?= $pre ? '' : 'disabled' ?>" href="/admin/dashboard?page=<?= $pre ?>">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </a>
+
+                <?php foreach($pages as $p): ?>
+                    <?php if ($p === '...'): ?>
+                        <div class="page-ellipsis">...</div>
+                    <?php else: ?>
+                        <a class="page-btn <?= $p == $page ? 'active' : '' ?>" href="/admin/dashboard?page=<?= $p ?>"><?= $p ?></a>
+                    <?php endif ?>
+                <?php endforeach ?>
+
+                <a class="nav-btn <?= $next ? '' : 'disabled' ?>" href="/admin/dashboard?page=<?= $next ?>">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </a>
             </div>
         </div>
     </div>
