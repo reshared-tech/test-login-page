@@ -1,6 +1,6 @@
 let chatRelations = [];
 
-for (let a of document.getElementsByClassName('start-chat')) {
+for (let a of document.getElementsByClassName('new-chat')) {
     a.addEventListener('click', function (e) {
         if (chatRelations.length === 0) {
             chatRelations.push(e.target.dataset.id);
@@ -13,7 +13,7 @@ for (let a of document.getElementsByClassName('start-chat')) {
         if (chatRelations.length === 1) {
             if (chatRelations[0] === e.target.dataset.id) {
                 chatRelations = [];
-                e.target.innerText = 'Chat'
+                e.target.innerText = 'New Chat'
                 e.target.previousElementSibling.style.display = 'none';
                 return;
             }

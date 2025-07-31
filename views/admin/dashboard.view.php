@@ -29,31 +29,35 @@
                     <a href="/?page=<?= $next ?>" class="link">Next page</a>
                 <?php endif ?>
             </div>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th><?= __('ID') ?></th>
-                    <th><?= __('Name') ?></th>
-                    <th><?= __('Email') ?></th>
-                    <th><?= __('CreatedAt') ?></th>
-                    <th><?= __('Action') ?></th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($users ?? [] as $user): ?>
+
+            <div class="table-container">
+                <table class="table">
+                    <thead>
                     <tr>
-                        <td><?= $user['id'] ?></td>
-                        <td><?= htmlspecialchars($user['name']) ?></td>
-                        <td><?= $user['email'] ?></td>
-                        <td><?= $user['created_at'] ?></td>
-                        <td>
-                            <span class="tip"></span>
-                            <a href="javascript:;" data-id="<?= $user['id'] ?>" class="link start-chat"><?= __('Chat') ?></a>
-                        </td>
+                        <th><?= __('ID') ?></th>
+                        <th><?= __('Name') ?></th>
+                        <th><?= __('Email') ?></th>
+                        <th><?= __('CreatedAt') ?></th>
+                        <th style="width:25rem"><?= __('Action') ?></th>
                     </tr>
-                <?php endforeach ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($users ?? [] as $user): ?>
+                        <tr>
+                            <td><?= $user['id'] ?></td>
+                            <td><?= htmlspecialchars($user['name']) ?></td>
+                            <td><?= $user['email'] ?></td>
+                            <td><?= $user['created_at'] ?></td>
+                            <td>
+                                <span class="tip"></span>
+                                <button class="action-btn action-btn-edit new-chat"
+                                        data-id="<?= $user['id'] ?>"><?= __('New Chat') ?></button>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
