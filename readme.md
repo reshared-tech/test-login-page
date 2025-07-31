@@ -6,6 +6,7 @@
     - Controllers `Controller layer code`
         - Controller.php    `Abstract controller with common method implementations`
         - DashboardController `Dashboard Page Controller Layer`
+        - ChatController.php `Chat Page Controlle Layer`
 - App `Business application logic code`
     - Controllers `Controller layer code`
         - Controller.php    `Abstract controller with common method implementations`
@@ -26,19 +27,21 @@
     - Utils.php   `Utility class (currently includes IP address and UserAgent retrieval methods)`
     - Validator.php   `Parameter Validation Related Method Encapsulation`
 - views  `Frontend code`
-    - basic  `Common frontend components`
+    - basic
         - head.view.php  `Common header template`
         - foot.view.php  `Common footer template`
-    - errors    ``
+    - errors
         - 404.view.php    `404 Page`
         - 500.view.php    `Server 500 Error Page`
+    - admin
+      - dashboard.view.php  `Admin dashboard page template`
     - home.view.php  `Home page template (after login)`
     - login.view.php  `Login page template`
     - register.view.php  `Registration page template`
 - public  `Public directory (web root)`
     - index.php
       `Application entry point (request routing, function declarations, language setup, business logic invocation)`
-    - assets  `Static files (js+css+img)`
+    - assets
         - js  `JavaScript files`
             - auth.js  `Auth-related JavaScript logic`
         - css  `CSS files`
