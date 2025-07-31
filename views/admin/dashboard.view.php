@@ -3,13 +3,11 @@
 <div style="display: flex; padding: 1.2rem 2rem;background-color:white;justify-content: space-between;align-items: center">
     <span><?= __('Users list') ?></span>
 
-    <?php if (\Tools\Auth::isAuthorized()): ?>
-        <span>
-            <?= __('Hi manager') ?>,
-            <?= htmlspecialchars(\Tools\Auth::user('name')) ?>,
-            <a href="/admin/logout" class="link"><?= __('Log out') ?></a>
-        </span>
-    <?php endif ?>
+    <span>
+        <?= __('Hi Administrator') ?>,
+        <?= htmlspecialchars(authorizedUser('name')) ?>,
+        <a href="/admin/logout" class="link"><?= __('Log out') ?></a>
+    </span>
 </div>
 
 <div style="padding: 1rem">
@@ -48,7 +46,10 @@
                         <td><?= htmlspecialchars($user['name']) ?></td>
                         <td><?= $user['email'] ?></td>
                         <td><?= $user['created_at'] ?></td>
-                        <td><a href=""><?= __('Chat') ?></a></td>
+                        <td>
+                            <span class="tip"></span>
+                            <a href="javascript:;" data-id="<?= $user['id'] ?>" class="link start-chat"><?= __('Chat') ?></a>
+                        </td>
                     </tr>
                 <?php endforeach ?>
                 </tbody>
@@ -57,4 +58,5 @@
     </div>
 </div>
 
+<script src="/assets/js/chat.js"></script>
 <?php require APP_ROOT . '/views/basic/foot.view.php' ?>

@@ -22,5 +22,6 @@ $router->post('/register', [\App\Controllers\AuthController::class, 'registerSub
 $router->get('/logout', [\App\Controllers\AuthController::class, 'logout']);
 
 $router->get('/admin/dashboard', [\Admin\Controllers\DashboardController::class, 'index']);
+$router->post('/admin/chat', [\Admin\Controllers\ChatController::class, 'store']);
 
 $router->dispatch();
