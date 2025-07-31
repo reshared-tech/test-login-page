@@ -20,8 +20,10 @@ $router->post('/login', [\App\Controllers\AuthController::class, 'loginSubmit'])
 $router->get('/register', [\App\Controllers\AuthController::class, 'register']);
 $router->post('/register', [\App\Controllers\AuthController::class, 'registerSubmit']);
 $router->get('/logout', [\App\Controllers\AuthController::class, 'logout']);
+$router->get('/api/chats', [\App\Controllers\HomeController::class, 'chats']);
 
 $router->get('/admin/dashboard', [\Admin\Controllers\DashboardController::class, 'index']);
+$router->get('/admin/logout', [\Admin\Controllers\DashboardController::class, 'logout']);
 $router->post('/admin/chat', [\Admin\Controllers\ChatController::class, 'store']);
 
 $router->dispatch();

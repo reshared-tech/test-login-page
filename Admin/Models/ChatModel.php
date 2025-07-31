@@ -24,9 +24,10 @@ class ChatModel extends BaseModel
             'creator_type' => self::CREATOR_TYPE_ADMIN,
             'users_count' => 2,
             'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ];
         $chatData['id'] = $this->database->prepare('INSERT INTO `chats`(`hash`, `name`, `status`, `creator_id`, `creator_type`, `users_count`, `created_at`) 
-            VALUES(:hash, :name, :status, :creator_id, :creator_type, :users_count, :created_at)', $chatData)->lastId();
+            VALUES(:hash, :name, :status, :creator_id, :creator_type, :users_count, :created_at, :updated_at)', $chatData)->lastId();
 
         if (!$chatData['id']) {
             throw new Exception('Create new chat failed');

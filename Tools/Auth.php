@@ -27,7 +27,7 @@ class Auth
 
     public static function isAuthorized()
     {
-        return !empty(self::user());
+        return !empty(self::user('id'));
     }
 
     public static function addAuth($user)

@@ -3,6 +3,7 @@
 namespace Admin\Controllers;
 
 use App\Models\UserModel;
+use Tools\Auth;
 
 class DashboardController extends Controller
 {
@@ -31,5 +32,12 @@ class DashboardController extends Controller
             'next' => $next,
             'pages' => $pages,
         ]);
+    }
+
+    public function logout()
+    {
+        Auth::removeAuth();
+
+        $this->forbidden();
     }
 }

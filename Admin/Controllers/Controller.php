@@ -24,7 +24,7 @@ class Controller
     private function checkAuth()
     {
         if (!Auth::isAuthorized()) {
-            if (!isset($_SERVER['PHP_AUTH_USER'])) {
+            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) {
                 $this->forbidden();
             }
 
@@ -57,7 +57,7 @@ class Controller
         }
     }
 
-    private function forbidden()
+    protected function forbidden()
     {
         header('WWW-Authenticate: Basic realm="Please log in"');
         header('HTTP/1.0 401 Unauthorized');

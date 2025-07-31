@@ -356,3 +356,43 @@ a {
         display: flex;
     }
 }
+
+.chat {
+    padding: 1rem 2rem;
+    border-radius: .8rem;
+    background-color: #f5f5f5;
+    font-size: 0.875rem;
+    color: #4e4e4f;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    transition: all .3s ease;
+    cursor: pointer;
+}
+
+.chat:hover {
+    background-color: #f1f0f0;
+}
+
+.chat .name {
+    color: #4b5563;
+    font-size: 1rem;
+}
+
+.chat div.name {
+    display: flex;
+    justify-content: space-between;
+}
+
+.chat div.name .unread {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: #2083f4;
+    border-radius: 50%;
+    color: white;
+    font-size: .875rem;
+}
