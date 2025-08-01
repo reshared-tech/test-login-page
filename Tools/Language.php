@@ -44,6 +44,7 @@ class Language
             '%s must be at least %d characters' => '%sは%d文字以上必要です',
             '%s must be less than %d characters' => '%sは%d文字未満で入力してください',
             'Chat Room' => 'チャットルーム',
+            'New Chat' => '新しいチャット',
             'Send' => '送信',
             'Input your message here' => 'ここにメッセージを入力してください'
         ],

@@ -33,6 +33,9 @@ function redirect($to = '/')
 function json($data)
 {
     header('Content-Type: application/json');
+    if (isset($data['message'])) {
+        $data['message'] = \Tools\Language::show($data['message']);
+    }
     exit(json_encode($data));
 }
 

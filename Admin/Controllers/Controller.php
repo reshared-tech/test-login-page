@@ -4,6 +4,7 @@ namespace Admin\Controllers;
 
 use Admin\Models\AdministratorModel;
 use Tools\Auth;
+use Tools\Language;
 use Tools\Validator;
 
 class Controller
@@ -15,6 +16,8 @@ class Controller
         session_start();
 
         Auth::name('admin');
+
+        Language::setLang(Language::JP);
 
         $this->checkAuth();
 
