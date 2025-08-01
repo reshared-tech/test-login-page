@@ -5,7 +5,7 @@
             <!-- Logged-in state view -->
             <div class="header">
                 <h1 class="title"><?= __('Welcome') ?></h1>
-                <p class="subtitle"><?= __('Hi') ?>, <?= htmlspecialchars(\Tools\Auth::user('name')) ?></p>
+                <p class="subtitle"><?= __('Hi') ?>, <?= htmlspecialchars(authorizedUser('name')) ?></p>
                 <p><a href="/logout" class="link"><?= __('Log out') ?></a></p>
             </div>
 
@@ -16,5 +16,5 @@
         </div>
     </div>
 
-<script src="/assets/js/chat_user.js"></script>
+<script src="/assets/js/chat/list.js"></script>
 <?php require APP_ROOT . '/views/basic/foot.view.php' ?>

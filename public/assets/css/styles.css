@@ -396,3 +396,89 @@ a {
     color: white;
     font-size: .875rem;
 }
+
+#messages {
+    padding: .5rem 1rem;
+    border: 1px solid #b8b9b9;
+    border-radius: .4rem;
+    height: calc(100vh - 20rem);
+    overflow-y: auto;
+}
+
+.center-box {
+    display: flex;
+    justify-content: center;
+}
+
+.textarea {
+    height: 5rem;
+    min-height: 5rem;
+    max-height: 12rem;
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: .5rem;
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.message-me {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: end;
+    background-color: #d3f9e5;
+    border-radius: .5rem;
+    padding: .8rem;
+}
+
+.message-me .content {
+    word-break: break-word;
+    font-size: .8rem;
+    color: #1f2937;
+}
+
+.message-right {
+    display: flex;
+    justify-content: end;
+    margin-top: 1rem;
+    align-items: end;
+}
+
+.message-right .status {
+    color: #bcbdbe;
+    padding: 0 .3rem;
+}
+
+.message-me .time {
+    font-size: .75rem;
+    color: #6b7280;
+}
+
+.message-other {
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+.message-other .name {
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+    vertical-align: top;
+}
+
+.message-other .content-box {
+    display: flex;
+    flex-direction: column;
+    background-color: #e3ecfb;
+    border-radius: .5rem;
+    padding: .8rem;
+}
+
+.message-other .content-box .content {
+    word-break: break-word;
+    font-size: .8rem;
+    color: #46494d;
+}
+
+.message-other .content-box .time {
+    font-size: .75rem;
+    color: #6b7280;
+}

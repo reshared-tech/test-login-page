@@ -67,4 +67,16 @@ class UserModel extends BaseModel
         }
         return $this->database->lastId();
     }
+
+    public function getUsersNameByIds($ids)
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $idStr = implode(',', $ids);
+        $data = $this->database->prepare('SELECT `id`,`name` FROM  `users` WHERE `id` in (' . $idStr . ')')->findAll();
+
+        return array_column($data, 'name', 'id');
+    }
 }

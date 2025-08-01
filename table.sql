@@ -52,7 +52,6 @@ CREATE TABLE `chat_relations` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary id',
   `user_id` bigint(20) unsigned NOT NULL COMMENT 'user id',
   `chat_id` bigint(20) unsigned NOT NULL COMMENT 'chat id',
-  `unread_count` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'unread count',
   `created_at` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT 'join time',
   `deleted_at` datetime DEFAULT NULL COMMENT 'quit time',
   PRIMARY KEY (`id`),

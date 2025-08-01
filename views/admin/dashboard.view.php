@@ -74,5 +74,5 @@
     </div>
 </div>
 
-<script src="/assets/js/chat.js"></script>
+<script src="/assets/js/chat/create.js"></script>
 <?php require APP_ROOT . '/views/basic/foot.view.php' ?>
