@@ -76,12 +76,12 @@ class ChatModel extends BaseModel
         return !empty($relation['id']);
     }
 
-    public function getMessagesByChatId($chatId, $lastMessageId = 0)
+    public function getMessagesHistoryByChatId($chatId, $oldestMessageId = 0)
     {
-        if ($lastMessageId > 0) {
-            return $this->database->prepare('SELECT `id`,`user_id`,`content`,`created_at` FROM `chat_messages` WHERE `chat_id` = :chat_id AND `id` < :last_id AND `deleted_at` IS NULL ORDER BY `id` DESC LIMIT 0,10', [
+        if ($oldestMessageId > 0) {
+            return $this->database->prepare('SELECT `id`,`user_id`,`content`,`created_at` FROM `chat_messages` WHERE `chat_id` = :chat_id AND `id` < :id AND `deleted_at` IS NULL ORDER BY `id` DESC LIMIT 0,10', [
                 'chat_id' => $chatId,
-                'last_id' => $lastMessageId,
+                'id' => $oldestMessageId,
             ])->findAll();
         }
 
@@ -90,14 +90,76 @@ class ChatModel extends BaseModel
         ])->findAll();
     }
 
-    public function saveMessage($chatId, $userId, $content)
+    public function getLatestMessagesByChatId($chatId, $latestMessageId = 0)
+    {
+        return $this->database->prepare('SELECT `id`,`user_id`,`content`,`created_at` FROM `chat_messages` WHERE `chat_id` = :chat_id AND `id` > :id AND `deleted_at` IS NULL ORDER BY `id` DESC LIMIT 0,10', [
+            'chat_id' => $chatId,
+            'id' => $latestMessageId,
+        ])->findAll();
+    }
+
+    public function touchChat($chatId)
+    {
+        return $this->database->prepare('UPDATE `chats` SET `updated_at` = :now WHERE `id` = :chat_id', [
+            'now' => date('Y-m-d H:i:s'),
+            'chat_id' => $chatId,
+        ]);
+    }
+
+    public function saveMessage($chatId, $userId, $content, $time)
     {
         return $this->database->prepare('INSERT INTO `chat_messages`(`user_id`, `chat_id`, `content`, `created_at`, `updated_at`) VALUES(:user_id, :chat_id, :content, :created_at, :updated_at)', [
             'chat_id' => $chatId,
             'user_id' => $userId,
             'content' => $content,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
-        ]);
+            'created_at' => $time,
+            'updated_at' => $time,
+        ])->lastId();
+    }
+
+    public function getReadMap($messageIds, $chatId)
+    {
+        if (empty($messageIds)) {
+            return [[], 0];
+        }
+
+        $users = $this->database->prepare('SELECT `user_id` FROM `chat_relations` WHERE `chat_id` = :chat_id AND `deleted_at` IS NULL', [
+            'chat_id' => $chatId,
+        ])->findAll();
+        if (empty($users)) {
+            return [];
+        }
+
+        $userIds = array_column($users, 'user_id');
+        $userIdStr = implode(',', $userIds);
+        $messageIdStr = implode(',', array_unique($messageIds));
+
+        $logs = $this->database->prepare("SELECT `message_id`, `user_id` FROM `chat_message_read_logs` WHERE `user_id` in ({$userIdStr}) AND `message_id` in ({$messageIdStr})")->findAll();
+
+        $result = [];
+        foreach ($logs as $log) {
+            $result[$log['message_id']][$log['user_id']] = true;
+        }
+        return [$result, count($userIds)];
+    }
+
+    public function saveMessageLog($chatId, $userId, $messageIds)
+    {
+        $data = array_map(function ($messageId) use ($chatId, $userId) {
+            return [
+                'chat_id' => $chatId,
+                'user_id' => $userId,
+                'message_id' => $messageId,
+                'created_at' => date('Y-m-d H:i:s'),
+            ];
+        }, $messageIds);
+
+        try {
+            [$sql, $data] = $this->parseInsert('chat_message_read_logs', $data);
+
+            return $this->database->prepare($sql, $data);
+        } catch (Exception $e) {
+            return false;
+        }
     }
 }

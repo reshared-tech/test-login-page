@@ -48,6 +48,14 @@ class Validator
         return $default;
     }
 
+    public function boolean($data, $key, $default = null)
+    {
+        if (isset($data[$key])) {
+            return (bool)$data[$key];
+        }
+        return $default;
+    }
+
     public function hasError()
     {
         return !empty($this->errors);

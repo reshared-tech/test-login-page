@@ -89,8 +89,18 @@ class HomeController extends Controller
 
     public function messages()
     {
-        $chatId = $this->validator->number($_GET, 'id');
-        $lastMessageId = $this->validator->number($_GET, 'lastMessageId', 0);
+        $data = jsonData();
+        if (empty($data)) {
+            json([
+                'code' => 10001,
+                'message' => 'Invalid request',
+            ]);
+        }
+
+        $chatId = $this->validator->number($data, 'id');
+        $oldestMessageId = $this->validator->number($data, 'oldestMessageId', 0);
+        $latestMessageId = $this->validator->number($data, 'latestMessageId', 0);
+        $latest = $this->validator->boolean($data, 'latest', false);
 
         if (empty($chatId)) {
             json([
@@ -118,11 +128,34 @@ class HomeController extends Controller
             ]);
         }
 
-        $messages = $model->getMessagesByChatId($chatId, $lastMessageId);
+        // 将用户已读信息写入日志，标记为已读
+        if (!empty($data['readMessageIds'])) {
+            $model->saveMessageLog($chatId, authorizedUser('id'), array_unique($data['readMessageIds']));
+        }
+
+        if ($latest) {
+            $messages = $model->getLatestMessagesByChatId($chatId, $latestMessageId);
+        } else {
+            $messages = $model->getMessagesHistoryByChatId($chatId, $oldestMessageId);
+        }
+
+        // Get messages read log
+        $messageIds = array_merge(array_column($messages, 'id'), $data['unreadMessageIds'] ?? []);
+        [$readMap, $relationCount] = $model->getReadMap($messageIds, $chatId);
+
+        $unreadMap = [];
+        if (!empty($data['unreadMessageIds'])) {
+            foreach ($data['unreadMessageIds'] as $messageId) {
+                $readCount = isset($readMap[$messageId]) ? count(array_keys($readMap[$messageId])) : 0;
+                $unreadMap[$messageId] = $relationCount - $readCount - 1;
+            }
+        }
+
         if (empty($messages)) {
             json([
                 'code' => 10000,
                 'message' => 'ok',
+                'unread' => $unreadMap,
                 'data' => [],
             ]);
         }
@@ -148,11 +181,19 @@ class HomeController extends Controller
             $messages[$k]['name'] = $messages[$k]['me']
                 ? authorizedUser('name')
                 : $usernames[$message['user_id']] ?? 'Unknown';
+
+            if ($messages[$k]['me']) {
+                $readCount = isset($readMap[$message['id']]) ? count(array_keys($readMap[$message['id']])) : 0;
+                $messages[$k]['read'] = $relationCount - $readCount - 1;
+            } else {
+                $messages[$k]['read'] = $readMap[$message['id']][authorizedUser('id')] ?? false;
+            }
         }
 
         json([
             'code' => 10000,
             'message' => 'ok',
+            'unread' => $unreadMap,
             'data' => $messages,
         ]);
     }
@@ -188,10 +229,18 @@ class HomeController extends Controller
         }
 
         // Save Message
-        if ($model->saveMessage($chatId, authorizedUser('id'), $message)) {
+        $time = date('Y-m-d H:i:s');
+        if ($messageId = $model->saveMessage($chatId, authorizedUser('id'), $message, $time)) {
+            $model->touchChat($chatId);
+
             json([
                 'code' => 10000,
-                'message' => 'ok'
+                'message' => 'ok',
+                'data' => [
+                    'message_id' => $messageId,
+                    'content' => $message,
+                    'created_at' => $time,
+                ],
             ]);
         } else {
             json([

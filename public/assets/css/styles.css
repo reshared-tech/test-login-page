@@ -454,7 +454,6 @@ a {
 }
 
 .message-other {
-    display: inline-block;
     margin-top: 1rem;
 }
 
@@ -465,7 +464,7 @@ a {
 }
 
 .message-other .content-box {
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     background-color: #e3ecfb;
     border-radius: .5rem;

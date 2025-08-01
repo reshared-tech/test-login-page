@@ -23,7 +23,7 @@ $router->get('/register', [\App\Controllers\AuthController::class, 'register']);
 $router->post('/register', [\App\Controllers\AuthController::class, 'registerSubmit']);
 $router->get('/logout', [\App\Controllers\AuthController::class, 'logout']);
 $router->get('/api/chats', [\App\Controllers\HomeController::class, 'chats']);
-$router->get('/api/messages', [\App\Controllers\HomeController::class, 'messages']);
+$router->post('/api/fetch', [\App\Controllers\HomeController::class, 'messages']);
 $router->post('/api/messages', [\App\Controllers\HomeController::class, 'newMessage']);
 $router->get('/chats', [\App\Controllers\HomeController::class, 'chat']);
 
