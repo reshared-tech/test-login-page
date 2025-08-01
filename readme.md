@@ -6,7 +6,7 @@
     - Controllers `Controller layer code`
         - Controller.php    `Abstract controller with common method implementations`
         - DashboardController `Dashboard Page Controller Layer`
-        - ChatController.php `Chat Page Controlle Layer`
+        - ChatController.php `Chat Page Controller Layer`
     - Models `Model layer code`
       - BaseModel.php `Abstract Model with common method implementations`
       - AdministratorModel.php `Model layer related to administrators`
@@ -16,10 +16,11 @@
         - Controller.php    `Abstract controller with common method implementations`
         - AuthController.php  `Auth-related controller logic (login, logout, registration)`
         - HomeController.php  `Business Logic Code Controller Layer`
+        - ChatController.php  `User's Chat Page Controller Layer`
     - Models  `Model layer code`
         - BaseModel.php  `Abstract Model with common method implementations`
         - UserModel.php  `User-related Model methods (database operations)`
-        - ChatModel.php ``
+        - ChatModel.php  `User-related Chat functions`
 - Tools  `Utility classes`
     - Auth.php  `Permission Verification Related Method Encapsulation`
     - Config.ini.php

@@ -22,10 +22,10 @@ $router->post('/login', [\App\Controllers\AuthController::class, 'loginSubmit'])
 $router->get('/register', [\App\Controllers\AuthController::class, 'register']);
 $router->post('/register', [\App\Controllers\AuthController::class, 'registerSubmit']);
 $router->get('/logout', [\App\Controllers\AuthController::class, 'logout']);
-$router->get('/api/chats', [\App\Controllers\HomeController::class, 'chats']);
-$router->post('/api/fetch', [\App\Controllers\HomeController::class, 'messages']);
-$router->post('/api/messages', [\App\Controllers\HomeController::class, 'newMessage']);
-$router->get('/chats', [\App\Controllers\HomeController::class, 'chat']);
+$router->get('/api/chats', [\App\Controllers\ChatController::class, 'chats']);
+$router->post('/api/fetch', [\App\Controllers\ChatController::class, 'messages']);
+$router->post('/api/messages', [\App\Controllers\ChatController::class, 'newMessage']);
+$router->get('/chats', [\App\Controllers\ChatController::class, 'chat']);
 
 $router->get('/admin/dashboard', [\Admin\Controllers\DashboardController::class, 'index']);
 $router->get('/admin/logout', [\Admin\Controllers\DashboardController::class, 'logout']);
