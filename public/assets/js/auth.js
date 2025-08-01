@@ -13,12 +13,12 @@ function validate() {
     }
 
     if (!nameInput.value.trim()) {
-        errors.push({field: 'name', message: 'Please input your name.'});
+        errors.push({field: 'name', message: '名前を入力してください'});
     }
 
     if (passwordInput.value !== confirmPasswordInput.value) {
         errors.push({
-            field: 'confirm_password', message: 'Password confirmation does not match.'
+            field: 'confirm_password', message: 'パスワードの確認が一致しません'
         });
     }
 
@@ -29,13 +29,13 @@ function validateLoginForm() {
     const errors = [];
 
     if (!emailInput.value.trim()) {
-        errors.push({field: 'email', message: 'Please input your email address.'});
+        errors.push({field: 'email', message: 'メールアドレスを入力してください'});
     }
 
     if (!passwordInput.value.trim()) {
-        errors.push({field: 'password', message: 'Please input your password.'});
+        errors.push({field: 'password', message: '暗証番号を入力してください'});
     } else if (passwordInput.value.length < 6) {
-        errors.push({field: 'password', message: 'Password must be at least 6 characters.'});
+        errors.push({field: 'password', message: 'パスワードは6文字以上でなければなりません'});
     }
 
     return errors;

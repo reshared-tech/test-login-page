@@ -83,6 +83,7 @@ class HomeController extends Controller
 
         // Show the chat page
         view('chat', [
+            'title' => 'Chat Room',
             'chat' => $chat
         ]);
     }

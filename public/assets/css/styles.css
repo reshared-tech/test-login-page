@@ -36,7 +36,12 @@ body {
     padding: 2rem 1.5rem;
 }
 
-/* Header Styles */
+.middle-card {
+    max-width: 35rem;
+    padding: 2rem 1.5rem;
+}
+
+    /* Header Styles */
 .header {
     margin-bottom: 2rem;
     text-align: center;

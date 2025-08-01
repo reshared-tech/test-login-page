@@ -96,11 +96,11 @@ if (sendBtn) {
             return;
         }
 
-        e.target.innerText = 'Sending...';
+        e.target.innerText = '送信中です...';
         const val = input.value.trim();
         if (val === '') {
             if (tip) {
-                tip.innerText = 'Please input your message';
+                tip.innerText = 'メッセージを入力してください';
                 tip.style.display = 'block';
             }
         } else {
@@ -114,7 +114,7 @@ if (sendBtn) {
             }).then(res => res.json())
                 .then(res => {
                     e.target.disabled = false;
-                    e.target.innerText = 'Send';
+                    e.target.innerText = '送信';
 
                     if (res.code === 10000) {
                         latestMessageId = res.data.message_id;

@@ -5,15 +5,15 @@ for (let a of document.getElementsByClassName('new-chat')) {
         if (chatRelations.length === 0) {
             chatRelations.push(e.target.dataset.id);
 
-            e.target.innerText = 'Cancel'
-            e.target.previousElementSibling.innerText = 'Please select another user to start, or ';
+            e.target.innerText = 'キャンセル'
+            e.target.previousElementSibling.innerText = '起動する他のユーザーを選択してください、または';
             e.target.previousElementSibling.style.display = 'inline-block';
             return;
         }
         if (chatRelations.length === 1) {
             if (chatRelations[0] === e.target.dataset.id) {
                 chatRelations = [];
-                e.target.innerText = 'New Chat'
+                e.target.innerText = '新しいチャット'
                 e.target.previousElementSibling.style.display = 'none';
                 return;
             }
@@ -27,7 +27,7 @@ for (let a of document.getElementsByClassName('new-chat')) {
             return;
         }
         chatRelations = [];
-        e.target.innerText = 'Chat'
+        e.target.innerText = 'チャット'
         e.target.previousElementSibling.style.display = 'none';
     });
 }

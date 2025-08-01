@@ -43,6 +43,9 @@ class Language
             'Password confirmation does not match.' => 'パスワードの確認が一致しません。',
             '%s must be at least %d characters' => '%sは%d文字以上必要です',
             '%s must be less than %d characters' => '%sは%d文字未満で入力してください',
+            'Chat Room' => 'チャットルーム',
+            'Send' => '送信',
+            'Input your message here' => 'ここにメッセージを入力してください'
         ],
     ];
 
