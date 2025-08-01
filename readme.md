@@ -68,22 +68,22 @@
 
 ## Function demonstration
 ### User registration
-![user registration demo](Static/1.mov "user registration demo")
+![user registration demo](Static/1-user%20registration%20demo.mov "user registration demo")
 ### User login
-![user login demo](Static/2.mov "user login demo")
+![user login demo](Static/2-user%20login%20demo.mov "user login demo")
 ### Administrator permission verification, can view all the user lists
-![users list demo](Static/3.mov "users list demo")
+![users list demo](Static/3-users%20list%20demo.mov "users list demo")
 ### The administrator can view all users by turning pages
-![users list pages demo](Static/4.mov "users list pages demo")
+![users list pages demo](Static/4-users%20list%20pages%20demo.mov "users list pages demo")
 ### Administrators can select two users to initiate a chat
-![start chat demo](Static/5.mov "start chat demo")
+![start chat demo](Static/5-start%20chat%20demo.mov "start chat demo")
 ### After logging in, the user's home page displays a list of all chats
-![user chat list demo](Static/6.mov "user chat list demo")
+![user chat list demo](Static/6-user%20chat%20list%20demo.mov "user chat list demo")
 ### Clicking on a single session will redirect you to the chat room page
-![user chat window demo](Static/7.mov "user chat window demo")
+![user chat window demo](Static/7-user%20chat%20window%20demo.mov "user chat window demo")
 ### After entering the content, click the Send button or press `shift + entry` to send the message
-![send message demo](Static/8.mov "send message demo")
+![send message demo](Static/8-send%20message%20demo.mov "send message demo")
 ### After the other party reads the message, the message status will be automatically updated to "read"
-![read status update demo](Static/9.mov "read status update demo")
+![read status update demo](Static/9-read%20status%20update%20demo.mov "read status update demo")
 ### Click the button at the top to get more historical messages
-![show more history demo](Static/10.mov "show more history")
+![show more history demo](Static/10-show%20more%20history.mov "show more history")
