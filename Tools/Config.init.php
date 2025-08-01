@@ -10,4 +10,6 @@ class Config
         'username' => '',
         'password' => '',
     ];
+
+    const timezone = 'Asia/Shanghai';
 }
