@@ -18,7 +18,7 @@ class ChatModel extends BaseModel
     {
         $chatData = [
             'hash' => uuid(),
-            'name' => 'A New Chat',
+            'name' => '新しいチャット',
             'status' => self::CHAT_STATUS_NORMAL,
             'creator_id' => authorizedUser('id'),
             'creator_type' => self::CREATOR_TYPE_ADMIN,
