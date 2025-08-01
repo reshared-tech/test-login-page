@@ -43,20 +43,46 @@
     - home.view.php  `Home page template (after login)`
     - login.view.php  `Login page template`
     - register.view.php  `Registration page template`
+    - chat.view.php   `User chat room page`
 - public  `Public directory (web root)`
     - index.php
       `Application entry point (request routing, function declarations, language setup, business logic invocation)`
     - assets
         - js  `JavaScript files`
+            - chat
+              - create.js   `Create javascript related to chat interaction logic`
+              - dialog.js   `js logic related to the chat window`
+              - list.js     `Chat list-related js`
             - auth.js  `Auth-related JavaScript logic`
-            - chat.js  `Initiate new chat related js, for admin interface logic`
-            - chat_user.js  `Get conversation list related js, for user interface chat interaction`
         - css  `CSS files`
             - styles.css  `All style definitions`
 - table.sql  `Database schema SQL file`
+- Static     `Some images for readme file, ***Unrelated*** to code`
 - readme.md  `Project documentation`
 
 ### about administrator
 > Administrators also have independent tables for storage, but for the convenience of testing, you can log in with the account 'admin' and the password 'admin', which is hardcoded in the code.
 > 
 > After entering the administrator list, you can subsequently add an administrator management module. At that time, you can perform operations such as "viewing", "adding", and "restricting" on administrators
+
+## Function demonstration
+### User registration
+![user registration demo](Static/1.gif "user registration demo")
+### User login
+![user login demo](Static/2.gif "user login demo")
+### Administrator permission verification, can view all the user lists
+![users list demo](Static/3.gif "users list demo")
+### The administrator can view all users by turning pages
+![users list pages demo](Static/4.gif "users list pages demo")
+### Administrators can select two users to initiate a chat
+![start chat demo](Static/5.gif "start chat demo")
+### After logging in, the user's home page displays a list of all chats
+![user chat list demo](Static/6.gif "user chat list demo")
+### Clicking on a single session will redirect you to the chat room page
+![user chat window demo](Static/7.gif "user chat window demo")
+### After entering the content, click the Send button or press `shift + entry` to send the message
+![send message demo](Static/8.gif "send message demo")
+### After the other party reads the message, the message status will be automatically updated to "read"
+![read status update demo](Static/9.gif "read status update demo")
+### Click the button at the top to get more historical messages
+![show more history demo](Static/10.gif "show more history")
