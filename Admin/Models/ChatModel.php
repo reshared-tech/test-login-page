@@ -26,7 +26,8 @@ class ChatModel extends BaseModel
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ];
-        $chatData['id'] = $this->database->prepare('INSERT INTO `chats`(`hash`, `name`, `status`, `creator_id`, `creator_type`, `users_count`, `created_at`) 
+
+        $chatData['id'] = $this->database->prepare('INSERT INTO `chats`(`hash`, `name`, `status`, `creator_id`, `creator_type`, `users_count`, `created_at`, `updated_at`) 
             VALUES(:hash, :name, :status, :creator_id, :creator_type, :users_count, :created_at, :updated_at)', $chatData)->lastId();
 
         if (!$chatData['id']) {
