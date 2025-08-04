@@ -12,4 +12,6 @@ class Config
     ];
 
     const timezone = 'Asia/Shanghai';
+
+    const domain = 'http://localhost/test-login-page';
 }

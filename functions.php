@@ -24,9 +24,18 @@ function view($path, $vars = [])
     require APP_ROOT . '/views/' . $path . '.view.php';
 }
 
+function base_tag()
+{
+    if (empty(\Tools\Config::domain) ||  \Tools\Config::domain === '/') {
+        return '';
+    }
+    $path = trim(\Tools\Config::domain, '/') . '/';
+    return "<base href=\"{$path}\"><script>const base_path=\"{$path}\"</script>";
+}
+
 function redirect($to = '/')
 {
-    header('Location: ' . $to);
+    header('Location: ' . \Tools\Router::$basePath . $to);
     exit;
 }
 

@@ -5,6 +5,23 @@ namespace Tools;
 class Router
 {
     protected $routes = [];
+    public static $basePath = '/';
+
+    public function __construct()
+    {
+        self::$basePath = parse_url(trim(Config::domain, '/'), PHP_URL_PATH);
+    }
+
+    protected function parseUri()
+    {
+        // Parse the request URI to get path segments as an array
+        $uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $uriPath = str_replace(self::$basePath, '', $uriPath);
+        if ($uriPath === '') {
+            $uriPath = '/';
+        }
+        return $uriPath;
+    }
 
     protected function add($uri, $method, $class)
     {
@@ -46,8 +63,8 @@ class Router
      */
     public function dispatch()
     {
-        // Parse the request URI to get path segments as an array
-        $uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $uriPath = $this->parseUri();
+
         $method = strtoupper($_SERVER['REQUEST_METHOD']);
 
         if (isset($this->routes[$uriPath][$method])) {
