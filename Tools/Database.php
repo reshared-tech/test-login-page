@@ -7,10 +7,13 @@ class Database
     static $pdo;
     protected $stmt;
 
-    public function __construct($refresh = false)
+    public function __construct($refresh = false, $useDb = true)
     {
         if (!self::$pdo || $refresh) {
             $config = Config::database;
+            if (!$useDb) {
+                unset($config['dbname']);
+            }
             self::$pdo = new \PDO(
                 'mysql:' . http_build_query($config, '', ';'),
                 $config['username'],
@@ -30,6 +33,11 @@ class Database
         $this->stmt->execute($attributes);
 
         return $this;
+    }
+
+    public function exec($sql)
+    {
+        return self::$pdo->exec($sql);
     }
 
     public function find()

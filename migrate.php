@@ -22,8 +22,21 @@ if (!is_dir($path)) {
     exit('no dir ' . $path . ' founded');
 }
 
-$db = new \Tools\Database();
 $dbName = \Tools\Config::database['dbname'];
+$db = new \Tools\Database(false, false);
+$exist = $db->prepare("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '{$dbName}'")->find();
+if (empty($exist)) {
+    confirm('There is no database: ' . $dbName . ' create it?');
+    try {
+        $newDatabase = true;
+        $db->exec("CREATE DATABASE `$dbName`");
+
+        $db = new \Tools\Database(true);
+    } catch (Exception $e) {
+        exit($e->getMessage());
+    }
+}
+
 $tables = $db->prepare("SELECT TABLE_NAME FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = '{$dbName}'")->findAll();
 if (!empty($tables)) {
     $tables = array_column($tables, 'TABLE_NAME');
@@ -41,7 +54,9 @@ if (!empty($tables)) {
         exit('This database is not empty. Non-empty databases cannot be used; otherwise, it will cause data insecurity. Please change the dbname' . PHP_EOL);
     }
 } else {
-    confirm("This is a empty database. Are you sure to start with db: {$dbName}?\n");
+    if (empty($newDatabase)) {
+        confirm("This is a empty database. Are you sure to start with db: {$dbName}?\n");
+    }
     execute($path);
     exit('Done!');
 }
