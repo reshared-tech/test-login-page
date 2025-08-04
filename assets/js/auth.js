@@ -76,7 +76,7 @@ form.addEventListener('submit', function (e) {
     }).then(res => res.json())
         .then(res => {
             if (res.code === 10000) {
-                window.location.href = '/';
+                window.location.href = base_path ? base_path : '/';
             } else {
                 if (typeof res.message === 'string') {
                     displayErrors([{field: 'email', message: res.message}]);

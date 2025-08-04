@@ -45,18 +45,17 @@
     - login.view.php  `Login page template`
     - register.view.php  `Registration page template`
     - chat.view.php   `User chat room page`
-- public  `Public directory (web root)`
-    - index.php
-      `Application entry point (request routing, function declarations, language setup, business logic invocation)`
-    - assets
-        - js  `JavaScript files`
-            - chat
-              - create.js   `Create javascript related to chat interaction logic`
-              - dialog.js   `js logic related to the chat window`
-              - list.js     `Chat list-related js`
-            - auth.js  `Auth-related JavaScript logic`
-        - css  `CSS files`
-            - styles.css  `All style definitions`
+- index.php   `Application entry point (request routing, function declarations, language setup, business logic invocation)`
+- assets
+    - js  `JavaScript files`
+        - chat
+          - create.js   `Create javascript related to chat interaction logic`
+          - dialog.js   `js logic related to the chat window`
+          - list.js     `Chat list-related js`
+        - auth.js  `Auth-related JavaScript logic`
+    - css  `CSS files`
+        - styles.css  `All style definitions`
+- .htaccess  `Apache redirect config`
 - table.sql  `Database schema SQL file`
 - videos     `Some images for readme file, ***Unrelated*** to code`
 - readme.md  `Project documentation`
@@ -65,6 +64,67 @@
 > Administrators also have independent tables for storage, but for the convenience of testing, you can log in with the account 'admin' and the password 'admin', which is hardcoded in the code.
 > 
 > After entering the administrator list, you can subsequently add an administrator management module. At that time, you can perform operations such as "viewing", "adding", and "restricting" on administrators
+
+### Set up
+- First, set the root directory of your `httpd` or `nginx` service to this project directory
+```apacheconf
+<Directory "/path/to/your/webroot/test-login-page">
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Require all granted
+
+    # make sure enable "mod_rewrite"
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule ^(.*)$ index.php/$1 [L]
+    </IfModule>
+</Directory>
+```
+```shell
+server {
+    listen 80;
+    listen [::]:80;
+    index index.html index.php
+    server_name localhost;
+    root /path/to/your/webroot/test-login-page;
+    autoindex on;
+    charset utf-8;
+    location ~ ^/([^/]+)/ {
+        try_files $uri $uri/ /$1/index.html /$1/index.php;
+    }
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+        fastcgi_hide_header X-Powered-By;
+    }
+}
+```
+
+- Then copy the initialization configuration file: Config.ini.php => Config.php
+```shell
+cp Tools/Config.ini.php Tools/Config.php
+```
+
+- And then configure the DB configuration, time zone, and your server domain name + path:
+```php
+const database = [
+    'host' => '127.0.0.1',
+    'port' => 3306,
+    'dbname' => 'your db',
+    'username' => 'your username',
+    'password' => 'your password',
+    'charset' => 'utf8mb4', // change it if you need
+];
+const timezone = 'Asia/Shanghai';
+const domain = 'http://localhost/test-login-page';
+```
+
+- And then just open the browser:`http://localhost/test-login-page`
 
 ## Function demonstration
 ### User registration

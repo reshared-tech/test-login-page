@@ -32,7 +32,7 @@ for (let a of document.getElementsByClassName('new-chat')) {
             chatRelations.push(e.target.dataset.id);
 
             // Send request to server to create chat
-            fetch('/admin/chat', {
+            fetch('admin/chat', {
                 method: 'POST', body: JSON.stringify(chatRelations)
             }).then(res => res.json()).then(res => {
                 alert(res.message);

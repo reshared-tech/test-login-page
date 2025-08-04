@@ -13,7 +13,7 @@ function fetchMessages(toBottom, latest) {
         return;
     }
 
-    fetch('/api/fetch', {
+    fetch('api/fetch', {
         method: 'POST', body: JSON.stringify({
             id: chatId,
             latest,
@@ -108,7 +108,7 @@ if (sendBtn) {
             const fd = new FormData();
             fd.append('chat_id', chatId);
             fd.append('message', input.value.trim());
-            fetch('/api/messages', {
+            fetch('api/messages', {
                 method: 'POST',
                 body: fd,
             }).then(res => res.json())

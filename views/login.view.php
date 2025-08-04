@@ -7,7 +7,7 @@
                 <p class="subtitle" id="form-subtitle"><?= __('Please log in your account') ?></p>
             </div>
 
-            <form class="form" id="form" method="post" action="/login">
+            <form class="form" id="form" method="post" action="login">
                 <div class="item">
                     <label for="email" class="label"><?= __('Email address') ?></label>
                     <input id="email" type="email" name="email" class="input"
@@ -25,11 +25,11 @@
                 <button id="submit-btn" type="submit"><?= __('Log in') ?></button>
 
                 <div class="footer">
-                    <p><?= __('Don\'t have an account?') ?> <a href="/register" class="link"><?= __('Sign up') ?></a></p>
+                    <p><?= __('Don\'t have an account?') ?> <a href="register" class="link"><?= __('Sign up') ?></a></p>
                 </div>
             </form>
         </div>
     </div>
 
-    <script src="/assets/js/auth.js"></script>
+    <script src="assets/js/auth.js"></script>
 <?php require APP_ROOT . '/views/basic/foot.view.php' ?>
