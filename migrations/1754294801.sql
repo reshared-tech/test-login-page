@@ -1,3 +1,12 @@
+DROP TABLE IF EXISTS `migrations`;
+
+CREATE TABLE `migrations` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `migration` varchar(255) NOT NULL COMMENT 'migration name',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'primary index',
   `name` varchar(255) NOT NULL COMMENT 'username',
@@ -10,6 +19,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `uniq_email` (`email`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `user_logs`;
 CREATE TABLE `user_logs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `user_id` bigint(20) unsigned NOT NULL COMMENT 'user id',
@@ -21,6 +31,7 @@ CREATE TABLE `user_logs` (
   KEY `idx_uid` (`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `administrators`;
 CREATE TABLE `administrators` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'primary index',
   `name` varchar(255) NOT NULL COMMENT 'manager name',
@@ -31,6 +42,7 @@ CREATE TABLE `administrators` (
   UNIQUE KEY `uniq_name` (`name`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `chats`;
 CREATE TABLE `chats` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `hash` varchar(50) NOT NULL COMMENT 'uniq hash',
@@ -48,6 +60,7 @@ CREATE TABLE `chats` (
   KEY `idx_utime` (`updated_at`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `chat_relations`;
 CREATE TABLE `chat_relations` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary id',
   `user_id` bigint(20) unsigned NOT NULL COMMENT 'user id',
@@ -59,6 +72,7 @@ CREATE TABLE `chat_relations` (
   KEY `idx_chat_id` (`chat_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `chat_messages`;
 CREATE TABLE `chat_messages` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary id',
   `user_id` bigint(20) unsigned NOT NULL COMMENT 'user id',
@@ -72,6 +86,7 @@ CREATE TABLE `chat_messages` (
   KEY `idx_cid_time` (`chat_id`,`created_at`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `chat_message_read_logs`;
 CREATE TABLE `chat_message_read_logs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary id',
   `chat_id` bigint(20) unsigned NOT NULL COMMENT 'chat id',
