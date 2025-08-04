@@ -58,6 +58,7 @@
 - .htaccess  `Apache redirect config`
 - table.sql  `Database schema SQL file`
 - videos     `Some images for readme file, ***Unrelated*** to code`
+- migrations  `Database migrations sql files`
 - readme.md  `Project documentation`
 
 ### about administrator
@@ -147,3 +148,11 @@ const domain = 'http://localhost/test-login-page';
 ![read status update demo](videos/9-read%20status%20update%20demo.mp4 "read status update demo")
 ### Click the button at the top to get more historical messages
 ![show more history demo](videos/10-show%20more%20history.mp4 "show more history")
+
+## Database migrate
+### A complete database migration can be performed by running `php migration.php`, including initializing to a new database
+![init_database_demo](videos/11-init_database_demo.mp4 "init_database_demo")
+### When you attempt to use a non-empty database, it will perform a check and report an error because old tables will be deleted during the operation process and the data is invaluable
+![check_database_is_empty_demo](videos/12-check_database_is_empty_demo.mp4 "check_database_is_empty_demo")
+### When there is a new change in the database structure, you can run `php migrate.php new` to create a new sql file with the current timestamp. If you run `php migrate.php` again at this time, only incremental changes will be made
+![only_incremental_changes_demo](videos/13-only_incremental_changes_demo.mp4 "only_incremental_changes_demo")
