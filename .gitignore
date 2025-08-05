@@ -1,3 +1,4 @@
 .idea
 Tools/Config.php
 assets/uploads
+.DS_Store
