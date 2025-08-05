@@ -26,6 +26,7 @@ $router->get('/api/chats', [\App\Controllers\ChatController::class, 'chats']);
 $router->post('/api/fetch', [\App\Controllers\ChatController::class, 'messages']);
 $router->post('/api/messages', [\App\Controllers\ChatController::class, 'newMessage']);
 $router->get('/chats', [\App\Controllers\ChatController::class, 'chat']);
+$router->post('/api/upload', [\App\Controllers\ChatController::class, 'upload']);
 
 $router->get('/admin', [\Admin\Controllers\HomeController::class, 'dashboard']);
 $router->get('/admin/logout', [\Admin\Controllers\HomeController::class, 'logout']);

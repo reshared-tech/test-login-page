@@ -267,4 +267,54 @@ class ChatController extends Controller
             ]);
         }
     }
+
+
+    public function upload()
+    {
+        if (empty($_FILES['files'])) {
+            json([
+                'code' => 10001,
+                'message' => 'No files founded',
+            ]);
+        }
+
+        $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        foreach ($_FILES['files']['error'] as $k => $error) {
+            if ($error > 0) {
+                json([
+                    'code' => 10001,
+                    'message' => 'Some error',
+                ]);
+            }
+            if (!in_array($_FILES['files']['type'][$k], $allowedTypes)) {
+                json([
+                    'code' => 10001,
+                    'message' => 'Only image/jpg,jpeg,png,gif can be send',
+                ]);
+            }
+        }
+
+        $targetDir = APP_ROOT . '/assets/uploads';
+        if (!file_exists($targetDir)) {
+            mkdir($targetDir, 0755, true);
+        }
+        $message = [];
+        foreach ($_FILES['files']['name'] as $k => $name) {
+            $ext = explode('.', $name);
+            $path = uniqid(microtime(true)) . '.' . end($ext);
+            $src = 'assets/uploads/' . $path;
+            $target = $targetDir . '/' . $path;
+            if (move_uploaded_file($_FILES['files']['tmp_name'][$k], $target)) {
+                $message[] = "<img class='chat-img' src='$src'>";
+            }
+        }
+        if (empty($message)) {
+            json([
+                'code' => 10003,
+                'message' => 'message send failed',
+            ]);
+        }
+        $_POST['message'] = implode("\n", $message);
+        $this->newMessage();
+    }
 }

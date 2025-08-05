@@ -3,6 +3,8 @@ const box = document.getElementById('messages'); // Message container
 const input = document.getElementById('input'); // Message input field
 const tip = document.getElementById('tip'); // Tip/error message element
 const sendBtn = document.getElementById('send-btn'); // Send button
+const upload = document.getElementById('upload'); // Upload element
+const uploadBtn = document.getElementById('upload-btn'); // Upload button
 
 // Message tracking variables
 let oldestMessageId = 0; // ID of the oldest loaded message
@@ -201,7 +203,7 @@ function scrollToBottom() {
 
 // Send message event handler
 if (sendBtn) {
-    sendBtn.addEventListener('click', function(e) {
+    sendBtn.addEventListener('click', function (e) {
         if (!input || e.target.disabled) return;
 
         const val = input.value.trim();
@@ -284,11 +286,11 @@ function handleSuccessfulSend(data) {
 
 // Input field event listeners
 if (input) {
-    input.addEventListener('input', function() {
+    input.addEventListener('input', function () {
         if (tip) tip.style.display = 'none';
     });
 
-    input.addEventListener('keypress', function(e) {
+    input.addEventListener('keypress', function (e) {
         if (e.key === 'Enter' && e.shiftKey) {
             sendBtn.click();
         }
@@ -298,3 +300,38 @@ if (input) {
 // Initial fetch and periodic updates
 fetchMessages(true, false);
 setInterval(() => fetchMessages(true, true), 1000);
+
+if (upload) {
+    upload.addEventListener('change', function (e) {
+        if (e.target.files.length === 0) {
+            return;
+        }
+        const formData = new FormData();
+        formData.append('chat_id', chatId);
+        for (let i = 0; i < e.target.files.length; i++) {
+            formData.append("files[]", e.target.files[i]);
+        }
+        fetch('api/upload', {
+            method: 'POST',
+            body: formData
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.code === 10000) {
+                    handleSuccessfulSend(res.data);
+                } else {
+                    showTip(res.message);
+                }
+            })
+            .catch(err => {
+                console.error('Error uploading message:', err);
+                showTip('画像送信に失敗しました'); // Failed to send
+            });
+    });
+}
+
+if (uploadBtn) {
+    uploadBtn.addEventListener('click', function () {
+        upload.click();
+    })
+}
