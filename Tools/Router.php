@@ -19,6 +19,8 @@ class Router
         $uriPath = str_replace(self::$basePath, '', $uriPath);
         if ($uriPath === '') {
             $uriPath = '/';
+        } else {
+            $uriPath = rtrim($uriPath, '/');
         }
         return $uriPath;
     }
