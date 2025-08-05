@@ -204,11 +204,13 @@ function scrollToBottom() {
 
 function addImagesListener() {
     const imgs = document.getElementsByClassName('chat-img');
-    for (let k in imgs) {
-        imgs.item(k).addEventListener('click', function (e) {
-            window.open(e.target.src);
-            e.target.classList = ['chat-img2'];
-        });
+    if (imgs.length > 0) {
+        for (let k in imgs) {
+            imgs.item(k).addEventListener('click', function (e) {
+                window.open(e.target.src);
+                e.target.classList = ['chat-img2'];
+            });
+        }
     }
 }
 

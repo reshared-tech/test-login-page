@@ -159,3 +159,9 @@ const domain = 'http://localhost/test-login-page';
 ![check_database_is_empty_demo](videos/12-check_database_is_empty_demo.mp4 "check_database_is_empty_demo")
 ### When there is a new change in the database structure, you can run `php migrate.php new` to create a new sql file with the current timestamp. If you run `php migrate.php` again at this time, only incremental changes will be made
 ![only_incremental_changes_demo](videos/13-only_incremental_changes_demo.mp4 "only_incremental_changes_demo")
+
+## New feature in 8.5
+### A brand-new back-end management interface and Chat management list
+![brand-new_back-end](videos/14-brand-new_back-end.mp4 "brand-new_back-end")
+### You can send pictures when chatting
+![send_image](videos/15-send_image.mp4 "send_image")
