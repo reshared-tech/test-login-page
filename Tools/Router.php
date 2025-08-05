@@ -16,11 +16,9 @@ class Router
     {
         // Parse the request URI to get path segments as an array
         $uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $uriPath = str_replace(self::$basePath, '', $uriPath);
+        $uriPath = rtrim(str_replace(self::$basePath, '', $uriPath), '/');
         if ($uriPath === '') {
             $uriPath = '/';
-        } else {
-            $uriPath = rtrim($uriPath, '/');
         }
         return $uriPath;
     }

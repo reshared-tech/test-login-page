@@ -13,20 +13,6 @@ class UserModel extends BaseModel
         ])->find();
     }
 
-    public function getUserList($page = 1, $size = 10)
-    {
-        $offset = ($page - 1) * $size;
-
-        return $this->database->prepare("SELECT * FROM `users` ORDER BY `id` DESC LIMIT $offset,$size")->findALl();
-    }
-
-    public function getUserTotal()
-    {
-        $res = $this->database->prepare('SELECT count(*) as `total` FROM `users`')->find();
-
-        return (int)$res['total'];
-    }
-
     public function addUserLog($userId, $note)
     {
         return $this->database->prepare('INSERT INTO `user_logs`(`user_id`, `user_agent`, `note`, `ip`, `created_at`) VALUES(:user_id, :user_agent, :note, :ip, :created_at)', [
@@ -78,5 +64,16 @@ class UserModel extends BaseModel
         $data = $this->database->prepare('SELECT `id`,`name` FROM  `users` WHERE `id` in (' . $idStr . ')')->findAll();
 
         return array_column($data, 'name', 'id');
+    }
+
+
+    public function getUserTotal()
+    {
+        return $this->getTotal('users');
+    }
+
+    public function getUserList($page = 1, $size = 10)
+    {
+        return $this->getList('users', $page, $size);
     }
 }

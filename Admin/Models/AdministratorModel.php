@@ -2,13 +2,13 @@
 
 namespace Admin\Models;
 
+use App\Models\BaseModel;
+
 class AdministratorModel extends BaseModel
 {
-    protected $table = 'administrators';
-
     public function getByName($name)
     {
-        return $this->database->prepare("SELECT * FROM `{$this->table}` WHERE `name` = :name", [
+        return $this->database->prepare("SELECT * FROM `administrators` WHERE `name` = :name", [
             'name' => $name
         ])->find();
     }

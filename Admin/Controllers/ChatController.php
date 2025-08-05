@@ -2,17 +2,53 @@
 
 namespace Admin\Controllers;
 
-use Admin\Models\ChatModel;
+use App\Models\ChatModel;
+use App\Models\UserModel;
 
 class ChatController extends Controller
 {
     public function index()
-    {
+    {   // Number of items per page
+        $size = 10;
+        // Get current page number from query parameters, default to 1
+        $page = max($this->validator->number($_GET, 'page', 1), 1);
+
+        $model = new ChatModel();
+        $total = $model->getChatTotal();
+        $data = $model->getChatList($page, $size);
+
+        // Get chat relations
+        $relations = $model->getChatRelations(array_column($data, 'id'));
+        // Get users name
+        $userModel = new UserModel();
+        $users = $userModel->getUsersNameByIds(array_unique(array_column($relations, 'user_id')));
+
+        $relationMap = [];
+        foreach ($relations as $relation) {
+            $relationMap[$relation['chat_id']][] = isset($users[$relation['user_id']]) ? htmlspecialchars($users[$relation['user_id']]) : '';
+        }
+
+        foreach ($data as $k => $datum) {
+            $users = $relationMap[$datum['id']] ?? [];
+            $data[$k]['users'] = implode("\n", $users);
+            $data[$k]['status'] = ChatModel::STATUS_MAP[$datum['status']];
+        }
+
+        // Calculate pagination values (previous, next, and all page numbers)
+        [$pre, $next, $pages] = $this->pages($total, $page, $size);
+
         view('admin.chats', [
             'heads' => [
                 '<link rel="stylesheet" href="assets/css/admin.css">'
             ],
-            'title' => 'Chats'
+            'title' => 'Chats',
+            'data' => $data,
+            'total' => $total,
+            'page' => $page,
+            'size' => $size,
+            'pre' => $pre, // Previous page number
+            'next' => $next, // Next page number
+            'pages' => $pages, // All available page numbers
         ]);
     }
 

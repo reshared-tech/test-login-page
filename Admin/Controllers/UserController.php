@@ -17,7 +17,7 @@ class UserController extends Controller
         // Initialize user model and get data
         $userModel = new UserModel();
         $total = $userModel->getUserTotal();
-        $users = $userModel->getUserList($page, $size);
+        $data = $userModel->getUserList($page, $size);
 
         // Calculate pagination values (previous, next, and all page numbers)
         [$pre, $next, $pages] = $this->pages($total, $page, $size);
@@ -28,7 +28,7 @@ class UserController extends Controller
                 '<link rel="stylesheet" href="assets/css/admin.css">'
             ],
             'title' => 'Users list',
-            'users' => $users,
+            'data' => $data,
             'total' => $total,
             'page' => $page,
             'size' => $size,
