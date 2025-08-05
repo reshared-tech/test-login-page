@@ -27,8 +27,9 @@ $router->post('/api/fetch', [\App\Controllers\ChatController::class, 'messages']
 $router->post('/api/messages', [\App\Controllers\ChatController::class, 'newMessage']);
 $router->get('/chats', [\App\Controllers\ChatController::class, 'chat']);
 
-$router->get('/admin/dashboard', [\Admin\Controllers\DashboardController::class, 'index']);
-$router->get('/admin/logout', [\Admin\Controllers\DashboardController::class, 'logout']);
+$router->get('/admin/dashboard', [\Admin\Controllers\HomeController::class, 'dashboard']);
+$router->get('/admin/logout', [\Admin\Controllers\HomeController::class, 'logout']);
+$router->get('/admin/users', [\Admin\Controllers\UserController::class, 'users']);
 $router->post('/admin/chat', [\Admin\Controllers\ChatController::class, 'store']);
 
 $router->dispatch();

@@ -26,7 +26,7 @@ function view($path, $vars = [])
 
 function base_tag()
 {
-    if (empty(\Tools\Config::domain) ||  \Tools\Config::domain === '/') {
+    if (empty(\Tools\Config::domain) || \Tools\Config::domain === '/') {
         return '';
     }
     $path = trim(\Tools\Config::domain, '/') . '/';

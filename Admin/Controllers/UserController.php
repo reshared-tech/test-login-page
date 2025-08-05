@@ -3,14 +3,10 @@
 namespace Admin\Controllers;
 
 use App\Models\UserModel;
-use Tools\Auth;
 
-class DashboardController extends Controller
+class UserController extends Controller
 {
-    /**
-     * Display dashboard with paginated user list
-     */
-    public function index()
+    public function users()
     {
         // Number of items per page
         $size = 10;
@@ -27,7 +23,10 @@ class DashboardController extends Controller
         [$pre, $next, $pages] = $this->pages($total, $page, $size);
 
         // Render the admin dashboard view with data
-        view('admin.dashboard', [
+        view('admin.users', [
+            'heads' => [
+                '<link rel="stylesheet" href="assets/css/admin.css">'
+            ],
             'title' => 'Users list',
             'users' => $users,
             'total' => $total,
@@ -37,17 +36,5 @@ class DashboardController extends Controller
             'next' => $next, // Next page number
             'pages' => $pages, // All available page numbers
         ]);
-    }
-
-    /**
-     * Handle administrator logout
-     */
-    public function logout()
-    {
-        // Remove authentication credentials
-        Auth::removeAuth();
-
-        // Redirect to forbidden/unauthorized page
-        $this->forbidden();
     }
 }
