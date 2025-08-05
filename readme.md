@@ -5,12 +5,11 @@
 - Admin `Management System Business Logic Code`
     - Controllers `Controller layer code`
         - Controller.php    `Abstract controller with common method implementations`
-        - DashboardController `Dashboard Page Controller Layer`
+        - HomeController `Home Page Controller Layer`
         - ChatController.php `Chat Page Controller Layer`
+        - UserController.php `User Page Controller Layer`
     - Models `Model layer code`
-      - BaseModel.php `Abstract Model with common method implementations`
       - AdministratorModel.php `Model layer related to administrators`
-      - ChatModel.php `Model layer related to the administrator operation chat`
 - App `Business application logic code`
     - Controllers `Controller layer code`
         - Controller.php    `Abstract controller with common method implementations`
@@ -40,12 +39,17 @@
         - 404.view.php    `404 Page`
         - 500.view.php    `Server 500 Error Page`
     - admin
+      - sidebar.view.php    `Sidebar tempalte`
+      - paginator.view.php   `Paginator tempalte`
       - dashboard.view.php  `Admin dashboard page template`
+      - users.view.php       `Users list dashboard page template`
+      - chats.view.php       `Chats list dashboard page template`
     - home.view.php  `Home page template (after login)`
     - login.view.php  `Login page template`
     - register.view.php  `Registration page template`
     - chat.view.php   `User chat room page`
 - index.php   `Application entry point (request routing, function declarations, language setup, business logic invocation)`
+- migrate.php `For database migration tools, to update the db structure, simply run php migration.php`
 - assets
     - js  `JavaScript files`
         - chat
@@ -56,7 +60,6 @@
     - css  `CSS files`
         - styles.css  `All style definitions`
 - .htaccess  `Apache redirect config`
-- table.sql  `Database schema SQL file`
 - videos     `Some images for readme file, ***Unrelated*** to code`
 - migrations  `Database migrations sql files`
 - readme.md  `Project documentation`
