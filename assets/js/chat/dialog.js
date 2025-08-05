@@ -189,6 +189,7 @@ function updateMessageContainer(html, latest) {
         const old = box.innerHTML.split('<hr>');
         box.innerHTML = old[0] + '<hr>' + html + old[1];
     }
+    addImagesListener();
 }
 
 /**
@@ -199,6 +200,16 @@ function scrollToBottom() {
         top: box.scrollHeight,
         behavior: 'smooth'
     });
+}
+
+function addImagesListener() {
+    const imgs = document.getElementsByClassName('chat-img');
+    for (let k in imgs) {
+        imgs.item(k).addEventListener('click', function (e) {
+            window.open(e.target.src);
+            e.target.classList = ['chat-img2'];
+        });
+    }
 }
 
 // Send message event handler
@@ -282,6 +293,7 @@ function handleSuccessfulSend(data) {
 
     input.value = '';
     scrollToBottom();
+    addImagesListener();
 }
 
 // Input field event listeners
