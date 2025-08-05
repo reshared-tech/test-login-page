@@ -6,6 +6,16 @@ use Admin\Models\ChatModel;
 
 class ChatController extends Controller
 {
+    public function index()
+    {
+        view('admin.chats', [
+            'heads' => [
+                '<link rel="stylesheet" href="assets/css/admin.css">'
+            ],
+            'title' => 'Chats'
+        ]);
+    }
+
     /**
      * Create a new chat session between two users
      *
