@@ -11,12 +11,6 @@ class Config
         'password' => '',
     ];
 
-    const awsS3 = [
-        'access_key' => '',
-        'secret_key' => '',
-        'region' => 'us-east-1',
-    ];
-
     const timezone = 'Asia/Shanghai';
 
     const domain = 'http://localhost/test-login-page';
