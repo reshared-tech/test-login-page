@@ -123,8 +123,14 @@ class ChatModel extends BaseModel
         return $result;
     }
 
-    public function getChatById($chatId)
+    public function getChatById($chatId, $ignoreStatus = false)
     {
+        if ($ignoreStatus) {
+            return $this->database->prepare('SELECT * FROM `chats` WHERE `id` = :chat_id', [
+                'chat_id' => $chatId,
+            ])->find();
+        }
+
         return $this->database->prepare('SELECT * FROM `chats` WHERE `id` = :chat_id AND `status` = :status AND `deleted_at` IS NULL', [
             'chat_id' => $chatId,
             'status' => self::CHAT_STATUS_NORMAL,
@@ -190,15 +196,21 @@ class ChatModel extends BaseModel
         ])->lastId();
     }
 
-    public function getReadMap($messageIds, $chatId)
+    public function getReadMap($messageIds, $chatId, $ignoreStatus = false)
     {
         if (empty($messageIds)) {
             return [[], 0];
         }
 
-        $users = $this->database->prepare('SELECT `user_id` FROM `chat_relations` WHERE `chat_id` = :chat_id AND `deleted_at` IS NULL', [
-            'chat_id' => $chatId,
-        ])->findAll();
+        if ($ignoreStatus) {
+            $users = $this->database->prepare('SELECT `user_id` FROM `chat_relations` WHERE `chat_id` = :chat_id', [
+                'chat_id' => $chatId,
+            ])->findAll();
+        } else {
+            $users = $this->database->prepare('SELECT `user_id` FROM `chat_relations` WHERE `chat_id` = :chat_id AND `deleted_at` IS NULL', [
+                'chat_id' => $chatId,
+            ])->findAll();
+        }
         if (empty($users)) {
             return [];
         }
@@ -244,6 +256,24 @@ class ChatModel extends BaseModel
     public function getChatList($page = 1, $size = 10)
     {
         return $this->getList('chats', $page, $size);
+    }
+
+    public function getMessageTotal($chatId)
+    {
+        $res = $this->database->prepare("SELECT count(*) as `total` FROM `chat_messages` WHERE `chat_id` = :chat_id", [
+            'chat_id' => $chatId
+        ])->find();
+
+        return (int)$res['total'];
+    }
+
+    public function getMessageList($chatId, $page = 1, $size = 10)
+    {
+        $offset = ($page - 1) * $size;
+
+        return $this->database->prepare("SELECT * FROM `chat_messages` WHERE `chat_id` = :chat_id ORDER BY `id` DESC LIMIT $offset,$size", [
+            'chat_id' => $chatId
+        ])->findAll();
     }
 
     public function getChatRelations($chatIds)

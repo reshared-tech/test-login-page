@@ -4,7 +4,7 @@ function disabled(e) {
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('menu').querySelectorAll('a').forEach(function (a) {
-        if (a.href === window.location.href) {
+        if (a.href === (window.location.origin + window.location.pathname)) {
             a.parentNode.classList = ['active'];
             a.addEventListener('click', disabled);
         } else {

@@ -22,6 +22,6 @@
         </div>
     </div>
 
-    <script>const chatId = <?= $chat['id']; ?></script>
+    <script>const chatId = "<?= $chat['id'] ?? ''; ?>";</script>
     <script src="assets/js/chat/dialog.js"></script>
 <?php require APP_ROOT . '/views/basic/foot.view.php' ?>

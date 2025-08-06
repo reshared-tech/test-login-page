@@ -3,31 +3,31 @@
 
 <main>
     <div class="content">
-        <h3>Chats List</h3>
+        <h3>Messages History</h3>
 
         <div class="table-container">
             <table class="table">
                 <thead>
                 <tr>
                     <th><?= __('ID') ?></th>
-                    <th><?= __('Chat Name') ?></th>
-                    <th><?= __('Users') ?></th>
-                    <th><?= __('Status') ?></th>
+                    <th><?= __('Sender') ?></th>
+                    <th><?= __('Content') ?></th>
                     <th><?= __('CreatedAt') ?></th>
-                    <th><?= __('Action') ?></th>
+                    <th><?= __('Read Users') ?></th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($data ?? [] as $datum): ?>
                     <tr>
                         <td><?= $datum['id'] ?></td>
-                        <td><?= htmlspecialchars($datum['name']) ?></td>
+                        <td><?= htmlspecialchars($datum['username']) ?></td>
                         <td>
-                            <pre><?= $datum['users'] ?></pre>
+                            <pre><?= $datum['content'] ?></pre>
                         </td>
-                        <td><?= $datum['status'] ?></td>
                         <td><?= $datum['created_at'] ?></td>
-                        <td><a class="action-btn" href="admin/chat?id=<?= $datum['id'] ?>">チャットの記録です</a></td>
+                        <td>
+                            <pre><?= $datum['read_users'] ?></pre>
+                        </td>
                     </tr>
                 <?php endforeach ?>
                 </tbody>

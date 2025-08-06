@@ -32,6 +32,7 @@ $router->get('/admin', [\Admin\Controllers\HomeController::class, 'dashboard']);
 $router->get('/admin/logout', [\Admin\Controllers\HomeController::class, 'logout']);
 $router->get('/admin/users', [\Admin\Controllers\UserController::class, 'users']);
 $router->get('/admin/chats', [\Admin\Controllers\ChatController::class, 'index']);
+$router->get('/admin/chat', [\Admin\Controllers\ChatController::class, 'show']);
 $router->post('/admin/chat', [\Admin\Controllers\ChatController::class, 'store']);
 
 $router->dispatch();
