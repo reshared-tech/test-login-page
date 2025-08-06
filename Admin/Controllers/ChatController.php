@@ -61,14 +61,14 @@ class ChatController extends Controller
 
         $model = new ChatModel();
         $total = $model->getMessageTotal($chatId);
-        $data = $model->getMessageList($chatId);
+        $data = $model->getMessageList($chatId, $page, $size);
 
         // Get read logs
-        [$readMap, $usersCount] = $model->getReadMap(array_column($data, 'id'), $chatId, true);
+        [$readMap, $usersCount, $userIds] = $model->getReadMap(array_column($data, 'id'), $chatId, true);
 
         // Get users name
         $userModel = new UserModel();
-        $users = $userModel->getUsersNameByIds(array_unique(array_column($data, 'user_id')));
+        $users = $userModel->getUsersNameByIds($userIds);
 
         foreach ($data as $k => $datum) {
             $data[$k]['username'] = $users[$datum['user_id']] ?? "({$datum['user_id']})";

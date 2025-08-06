@@ -225,7 +225,7 @@ class ChatModel extends BaseModel
         foreach ($logs as $log) {
             $result[$log['message_id']][$log['user_id']] = true;
         }
-        return [$result, count($userIds)];
+        return [$result, count($userIds), $userIds];
     }
 
     public function saveMessageLog($chatId, $userId, $messageIds)

@@ -1,6 +1,11 @@
 <?php
 
-function dd(...$vars)
+/**
+ * Dump and die - Output variables and terminate execution
+ *
+ * @param mixed ...$vars Variables to dump
+ */
+function dd(...$vars): void
 {
     echo '<pre>';
     foreach ($vars as $var) {
@@ -10,81 +15,106 @@ function dd(...$vars)
     exit;
 }
 
-function __($key)
+/**
+ * Translate a language key
+ *
+ * @param string $key Translation key
+ * @return string Translated text
+ */
+function __(string $key): string
 {
     return Tools\Language::show($key);
 }
 
-function calcPages($total, $currentPage, $size = 10, $show = 7)
+/**
+ * Calculate pagination data
+ *
+ * @param int $total Total items count
+ * @param int $currentPage Current page number
+ * @param int $size Items per page (default: 10)
+ * @param int $show Maximum page numbers to show (default: 7)
+ * @return array [previous page, next page, page numbers array]
+ */
+function calcPages(int $total, int $currentPage, int $size = 10, int $show = 7): array
 {
-    $totalPages = ceil($total / $size);
-    $pre = $currentPage == 1 ? 0 : $currentPage - 1;
-    $next = $currentPage == $totalPages ? 0 : $currentPage + 1;
+    $totalPages = max(1, ceil($total / $size));  // Ensure at least 1 page
+    $pre = $currentPage <= 1 ? 0 : $currentPage - 1;
+    $next = $currentPage >= $totalPages ? 0 : $currentPage + 1;
 
+    // Simple case when total pages <= show pages
     if ($totalPages <= $show) {
         return [$pre, $next, range(1, $totalPages)];
     }
 
     $half = floor($show / 2);
-    $left = $currentPage - $half;
-    $right = $currentPage + $half;
+    $left = max(1, $currentPage - $half);  // Ensure doesn't go below 1
+    $right = min($totalPages, $currentPage + $half);  // Ensure doesn't exceed total pages
 
-    if ($left < 1) {
-        $left = 1;
+    // Adjust window if near boundaries
+    if ($left === 1) {
         $right = $show;
-    }
-
-    if ($right > $totalPages) {
-        $right = $totalPages;
-        $left = $totalPages - $show + 1;
+    } elseif ($right === $totalPages) {
+        $left = max(1, $totalPages - $show + 1);
     }
 
     $pages = range($left, $right);
 
+    // Add first page and ellipsis if needed
     if ($left > 1) {
-        if ($left > 2) {
-            array_unshift($pages, '...');
-        }
-        array_unshift($pages, 1);
+        array_unshift($pages, $left > 2 ? '...' : 1, 1);
     }
 
+    // Add last page and ellipsis if needed
     if ($right < $totalPages) {
-        if ($right < $totalPages - 1) {
-            $pages[] = '...';
-        }
-        $pages[] = $totalPages;
+        array_push($pages, $right < $totalPages - 1 ? '...' : $totalPages, $totalPages);
     }
 
-    return [$pre, $next, $pages];
+    return [$pre, $next, array_unique($pages)];  // Remove potential duplicates
 }
 
-function view($path, $vars = [])
+/**
+ * Render a view template
+ *
+ * @param string $path View path (dots converted to slashes)
+ * @param array $vars Variables to extract
+ */
+function view(string $path, array $vars = []): void
 {
     $path = str_replace('.', '/', $path);
 
-    if (isset($vars['page']) && isset($vars['size']) && isset($vars['total'])) {
-        [$pre, $next, $pages] = calcPages($vars['total'], $vars['page'], $vars['size']);
-        $vars['pre'] = $pre;
-        $vars['next'] = $next;
-        $vars['pages'] = $pages;
+    // Automatically handle pagination if these vars exist
+    if (isset($vars['page'], $vars['size'], $vars['total'])) {
+        [$vars['pre'], $vars['next'], $vars['pages']] = calcPages(
+            $vars['total'],
+            $vars['page'],
+            $vars['size']
+        );
     }
 
     extract($vars);
-
     require APP_ROOT . '/views/' . $path . '.view.php';
 }
 
-function pageUrl($p)
+/**
+ * Generate page URL for pagination
+ *
+ * @param int $p Page number
+ * @return string Generated URL
+ */
+function pageUrl(int $p): string
 {
-    $current = $_SERVER['REQUEST_URI'];
-    if (strpos($current, '?') !== false) {
-        return $current . '&page=' . $p;
-    }
-
-    return $current . '?page=' . $p;
+    $url = parse_url($_SERVER['REQUEST_URI']);
+    parse_str($url['query'] ?? '', $params);
+    $params['page'] = $p;
+    return $url['path'] . '?' . http_build_query($params);
 }
 
-function base_tag()
+/**
+ * Generate base HTML tag with path information
+ *
+ * @return string Base tag HTML or empty string
+ */
+function base_tag(): string
 {
     if (empty(\Tools\Config::domain) || \Tools\Config::domain === '/') {
         return '';
@@ -93,13 +123,23 @@ function base_tag()
     return "<base href=\"{$path}\"><script>const base_path=\"{$path}\"</script>";
 }
 
-function redirect($to = '/')
+/**
+ * Redirect to another URL
+ *
+ * @param string $to Redirect destination (default: '/')
+ */
+function redirect(string $to = '/'): void
 {
     header('Location: ' . \Tools\Router::$basePath . $to);
     exit;
 }
 
-function json($data)
+/**
+ * Output JSON response and terminate
+ *
+ * @param array $data Data to encode as JSON
+ */
+function json(array $data): void
 {
     header('Content-Type: application/json');
     if (isset($data['message'])) {
@@ -108,25 +148,45 @@ function json($data)
     exit(json_encode($data));
 }
 
-function jsonData()
+/**
+ * Get JSON data from request body
+ *
+ * @return array Decoded JSON data
+ */
+function jsonData(): array
 {
-    return json_decode(file_get_contents('php://input'), true);
+    return json_decode(file_get_contents('php://input'), true) ?? [];
 }
 
 /**
+ * Generate a random UUID
+ *
+ * @param int $length Desired length (default: 16)
+ * @return string Generated UUID
  * @throws \Random\RandomException
  */
-function uuid($length = 16)
+function uuid(int $length = 16): string
 {
     return substr(bin2hex(random_bytes($length)), 0, $length);
 }
 
-function isAuthorized()
+/**
+ * Check if user is authorized
+ *
+ * @return bool Authorization status
+ */
+function isAuthorized(): bool
 {
     return \Tools\Auth::isAuthorized();
 }
 
-function authorizedUser($key = null)
+/**
+ * Get authorized user data
+ *
+ * @param string|null $key Specific user data key to retrieve
+ * @return mixed User data or specific value
+ */
+function authorizedUser(?string $key = null)
 {
     return \Tools\Auth::user($key);
 }
