@@ -1,12 +1,10 @@
 <?php
 define('APP_ROOT', __DIR__);
-
 spl_autoload_register(function ($class) {
     $path = str_replace('\\', DIRECTORY_SEPARATOR, $class);
 
     require APP_ROOT . '/' . $path . '.php';
 });
-
 date_default_timezone_set(\Tools\Config::timezone);
 
 // Some functions
