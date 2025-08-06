@@ -166,3 +166,7 @@ const domain = 'http://localhost/test-login-page';
 ![brand-new_back-end](videos/14-brand-new_back-end.mp4 "brand-new_back-end")
 ### You can send pictures when chatting
 ![send_image](videos/15-send_image.mp4 "send_image")
+
+## New feature in 8.6
+### You can view the message records of any chat
+![view_messages](videos/16-view_messages.mp4 "send_image")
