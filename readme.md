@@ -44,6 +44,7 @@
       - dashboard.view.php  `Admin dashboard page template`
       - users.view.php       `Users list dashboard page template`
       - chats.view.php       `Chats list dashboard page template`
+      - messages.view.php    `Chat Messages list dashboard page template`
     - home.view.php  `Home page template (after login)`
     - login.view.php  `Login page template`
     - register.view.php  `Registration page template`
