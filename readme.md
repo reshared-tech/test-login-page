@@ -170,3 +170,7 @@ const domain = 'http://localhost/test-login-page';
 ## New feature in 8.6
 ### You can view the message records of any chat
 ![view_messages](videos/16-view_messages.mp4 "send_image")
+
+## Update in 8.7
+### Messages list in admin page
+![messages_list_admin](videos/17-messages_list_admin.mp4 "messages_list_admin")
