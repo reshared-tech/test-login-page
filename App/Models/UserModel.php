@@ -6,10 +6,22 @@ use Tools\Utils;
 
 class UserModel extends BaseModel
 {
+    public function passwordEncrypt($password)
+    {
+        return password_hash($password, PASSWORD_DEFAULT);
+    }
+
     public function getUserByEmail($email)
     {
         return $this->database->prepare('SELECT * FROM `users` WHERE `email` = :email', [
             'email' => $email
+        ])->find();
+    }
+
+    public function getUserById($id)
+    {
+        return $this->database->prepare('SELECT * FROM `users` WHERE `id` = :id', [
+            'id' => $id
         ])->find();
     }
 
@@ -56,7 +68,7 @@ class UserModel extends BaseModel
         $res = $this->database->prepare('INSERT INTO users(`name`, `email`, `password`, `created_at`) VALUES(:name, :email, :password, :now)', [
             'name' => $name,
             'email' => $email,
-            'password' => password_hash($password, PASSWORD_DEFAULT),
+            'password' => $this->passwordEncrypt($password),
             'now' => date('Y-m-d H:i:s'),
         ]);
         if (!$res) {

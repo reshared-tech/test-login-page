@@ -84,6 +84,35 @@ class HomeController extends Controller
 
     public function savePassword()
     {
+        $currentPassword = $this->validator->string($_POST, 'current_password');
+        $newPassword = $this->validator->string($_POST, 'new_password');
 
+        $model = new UserModel();
+        $user = $model->getUserById(authorizedUser('id'));
+        if (!password_verify($currentPassword, $user['password'])) {
+            json([
+                'code' => 10003,
+                'message' => 'Incorrect current password',
+            ]);
+        }
+
+        if ($currentPassword == $newPassword) {
+            json([
+                'code' => 10001,
+                'message' => '新旧のパスワードは同じではいけません。',
+            ]);
+        }
+
+        if ($model->updateById($user['id'], ['password' => $model->passwordEncrypt($newPassword)])) {
+            json([
+                'code' => 10000,
+                'message' => 'Save Success',
+            ]);
+        } else {
+            json([
+                'code' => 10003,
+                'message' => 'Something wrong',
+            ]);
+        }
     }
 }

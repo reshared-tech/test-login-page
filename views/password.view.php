@@ -12,14 +12,14 @@
                     <label for="current_password" class="label"><?= __('Current Password') ?></label>
                     <input id="current_password" type="password" name="current_password" class="input"
                            placeholder="<?= __('Please input your current password.') ?>" required minlength="6">
-                    <p class="tip for-current-password"></p>
+                    <p class="tip for-current_password"></p>
                 </div>
 
                 <div class="item">
-                    <label for="password" class="label"><?= __('New Password') ?></label>
-                    <input id="password" type="password" name="password" class="input"
+                    <label for="new_password" class="label"><?= __('New Password') ?></label>
+                    <input id="new_password" type="password" name="new_password" class="input"
                            placeholder="<?= __('Please input your new password.') ?>" required minlength="6">
-                    <p class="tip for-password"></p>
+                    <p class="tip for-new_password"></p>
                 </div>
 
                 <div class="item">
@@ -34,5 +34,5 @@
         </div>
     </div>
 
-<script src="assets/js/chat/password.js"></script>
+<script src="assets/js/password.js"></script>
 <?php require APP_ROOT . '/views/basic/foot.view.php' ?>

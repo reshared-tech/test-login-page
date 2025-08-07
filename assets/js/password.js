@@ -1,41 +1,22 @@
 const form = document.getElementById('form');
 
-const nameInput = document.getElementById('name');
-const emailInput = document.getElementById('email');
-const passwordInput = document.getElementById('password');
+const currentPasswordInput = document.getElementById('current_password');
+const newPasswordInput = document.getElementById('new_password');
 const confirmPasswordInput = document.getElementById('confirm_password');
 
 function validate() {
-    const errors = validateProfileForm(); // Includes email/password validation
-
-    if (!nameInput) {
-        return errors;
-    }
-
-    if (!nameInput.value.trim()) {
-        errors.push({field: 'name', message: '名前を入力してください'});
-    }
-
-    if (passwordInput.value !== confirmPasswordInput.value) {
-        errors.push({
-            field: 'confirm_password', message: 'パスワードの確認が一致しません'
-        });
-    }
-
-    return errors;
-}
-
-function validateProfileForm() {
     const errors = [];
 
-    if (!emailInput.value.trim()) {
-        errors.push({field: 'email', message: 'メールアドレスを入力してください'});
+    if (!currentPasswordInput.value.trim()) {
+        errors.push({field: 'current_password', message: '現在のパスワードをお願いします。'});
     }
 
-    if (!passwordInput.value.trim()) {
-        errors.push({field: 'password', message: '暗証番号を入力してください'});
-    } else if (passwordInput.value.length < 6) {
-        errors.push({field: 'password', message: 'パスワードは6文字以上でなければなりません'});
+    if (!newPasswordInput.value.trim()) {
+        errors.push({field: 'new_password', message: '新しいパスワードをお願いします。'});
+    }
+
+    if (newPasswordInput.value.trim() !== confirmPasswordInput.value.trim()) {
+        errors.push({field: 'confirm_password', message: 'パスワードが新しいパスワードと一致しないことを確認しました'});
     }
 
     return errors;
@@ -63,27 +44,22 @@ form.addEventListener('submit', function (e) {
     }
 
     const body = new FormData();
-
-    body.append('email', emailInput.value.trim());
-    body.append('password', passwordInput.value.trim());
-    if (nameInput) {
-        body.append('name', nameInput.value.trim());
-    }
+    body.append('current_password', currentPasswordInput.value.trim());
+    body.append('new_password', newPasswordInput.value.trim());
 
     fetch(form.action, {
-        method: 'POST',
-        body: body,
+        method: 'POST', body: body,
     }).then(res => res.json())
         .then(res => {
             if (res.code === 10000) {
-                window.location.href = base_path ? base_path : '/';
+                alert(res.message);
+                window.location.reload();
             } else {
                 if (typeof res.message === 'string') {
-                    displayErrors([{field: 'email', message: res.message}]);
+                    displayErrors([{field: 'current_password', message: res.message}]);
                 } else {
                     displayErrors(Object.keys(res.message).map(field => ({
-                        field,
-                        message: res.message[field],
+                        field, message: res.message[field],
                     })));
                 }
             }
@@ -101,7 +77,7 @@ function clearError(input) {
     }
 }
 
-[nameInput, emailInput, passwordInput, confirmPasswordInput].forEach(input => {
+[currentPasswordInput, newPasswordInput, confirmPasswordInput].forEach(input => {
     if (input) {
         input.addEventListener('input', clearError.bind(null, input));
     }

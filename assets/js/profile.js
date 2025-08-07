@@ -74,7 +74,7 @@ function clearError(input) {
     }
 }
 
-[nameInput, emailInput, passwordInput, confirmPasswordInput].forEach(input => {
+[nameInput, emailInput].forEach(input => {
     if (input) {
         input.addEventListener('input', clearError.bind(null, input));
     }
