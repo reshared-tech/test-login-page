@@ -46,7 +46,8 @@ class Language
             'Chat Room' => 'チャットルーム',
             'New Chat' => '新しいチャット',
             'Send' => '送信',
-            'Input your message here' => 'ここにメッセージを入力してください'
+            'Input your message here' => 'ここにメッセージを入力してください',
+            'Save' => '保存します',
         ],
     ];
 

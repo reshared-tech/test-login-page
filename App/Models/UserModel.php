@@ -13,6 +13,17 @@ class UserModel extends BaseModel
         ])->find();
     }
 
+    public function updateById($id, $data)
+    {
+        try {
+            [$sql, $val] = $this->parseUpdate('users', $data);
+            $val['id'] = $id;
+            return $this->database->prepare($sql . ' WHERE `id` = :id', $val);
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
     public function addUserLog($userId, $note)
     {
         return $this->database->prepare('INSERT INTO `user_logs`(`user_id`, `user_agent`, `note`, `ip`, `created_at`) VALUES(:user_id, :user_agent, :note, :ip, :created_at)', [

@@ -6,7 +6,11 @@
             <div class="header">
                 <h1 class="title"><?= __('Welcome') ?></h1>
                 <p class="subtitle"><?= __('Hi') ?>, <?= htmlspecialchars(authorizedUser('name')) ?></p>
-                <p><a href="profile" class="link"><?= __('Profile') ?></a> <a href="logout" class="link"><?= __('Log out') ?></a></p>
+                <div style="display:flex; justify-content:space-around;">
+                    <a href="profile" class="link"><?= __('Profile') ?></a>
+                    <a href="password" class="link"><?= __('Password') ?></a>
+                    <a href="logout" class="link"><?= __('Log out') ?></a>
+                </div>
             </div>
 
             <p id="all-unread" class="text">loading...</p>

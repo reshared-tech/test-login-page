@@ -17,6 +17,25 @@ abstract class BaseModel
     /**
      * @throws Exception
      */
+    protected function parseUpdate($table, $data)
+    {
+        if (empty($data)) {
+            throw new Exception('Update data is empty');
+        }
+
+        $keys = [];
+        $values = [];
+        foreach ($data as $k => $v) {
+            $keys[] = "`$k` = :$k";
+            $values[":{$k}"] = $v;
+        }
+        $keyStr = implode(',', $keys);
+        return ["UPDATE `$table` SET $keyStr", $values];
+    }
+
+    /**
+     * @throws Exception
+     */
     protected function parseInsert($table, $data)
     {
         if (empty($data)) {
