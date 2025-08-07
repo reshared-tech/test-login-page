@@ -27,5 +27,5 @@
         </div>
     </div>
 
-<script src="assets/js/chat/profile.js"></script>
+<script src="assets/js/profile.js"></script>
 <?php require APP_ROOT . '/views/basic/foot.view.php' ?>

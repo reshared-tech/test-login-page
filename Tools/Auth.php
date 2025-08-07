@@ -35,6 +35,13 @@ class Auth
         $_SESSION[self::$name]['user'] = $user;
     }
 
+    public static function updateAuth($data)
+    {
+        foreach ($data as $k => $v) {
+            $_SESSION[self::$name]['user'][$k] = $v;
+        }
+    }
+
     public static function removeAuth()
     {
         unset($_SESSION[self::$name]);

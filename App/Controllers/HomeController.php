@@ -62,6 +62,7 @@ class HomeController extends Controller
         }
 
         if ($model->updateById(authorizedUser('id'), $update)) {
+            Auth::updateAuth($update);
             json([
                 'code' => 10000,
                 'message' => 'Save Success',
