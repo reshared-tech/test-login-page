@@ -88,6 +88,7 @@ class ChatController extends Controller
             'heads' => [
                 '<link rel="stylesheet" href="assets/css/admin.css">'
             ],
+            'chatId' => $chatId,
             'title' => 'Messages History',
             'data' => $data,
             'total' => $total,

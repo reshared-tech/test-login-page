@@ -324,3 +324,11 @@ a {
         display: flex;
     }
 }
+
+#messages {
+    height: calc(100vh - 4rem) !important;
+}
+
+.content-box .content {
+    padding: 0;
+}
