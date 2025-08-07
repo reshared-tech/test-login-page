@@ -19,6 +19,7 @@ $router->get('/login', [\App\Controllers\AuthController::class, 'login']);
 $router->post('/login', [\App\Controllers\AuthController::class, 'loginSubmit']);
 $router->get('/register', [\App\Controllers\AuthController::class, 'register']);
 $router->post('/register', [\App\Controllers\AuthController::class, 'registerSubmit']);
+$router->get('/profile', [\App\Controllers\HomeController::class, 'profile']);
 $router->get('/logout', [\App\Controllers\AuthController::class, 'logout']);
 $router->get('/api/chats', [\App\Controllers\ChatController::class, 'chats']);
 $router->post('/api/fetch', [\App\Controllers\ChatController::class, 'messages']);

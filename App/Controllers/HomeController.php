@@ -21,4 +21,14 @@ class HomeController extends Controller
             'title' => 'Welcome'
         ]);
     }
+
+    public function profile()
+    {
+        $user = authorizedUser();
+
+        view('profile', [
+            'title' => 'Profile',
+            'user' => $user,
+        ]);
+    }
 }
