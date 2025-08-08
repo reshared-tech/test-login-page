@@ -11,21 +11,21 @@
                 <div class="item">
                     <label for="current_password" class="label"><?= __('Current Password') ?></label>
                     <input id="current_password" type="password" name="current_password" class="input"
-                           placeholder="<?= __('Please input your current password.') ?>" required minlength="6">
+                           placeholder="<?= __('Please input your current password') ?>" required minlength="6">
                     <p class="tip for-current_password"></p>
                 </div>
 
                 <div class="item">
                     <label for="new_password" class="label"><?= __('New Password') ?></label>
                     <input id="new_password" type="password" name="new_password" class="input"
-                           placeholder="<?= __('Please input your new password.') ?>" required minlength="6">
+                           placeholder="<?= __('Please input your new password') ?>" required minlength="6">
                     <p class="tip for-new_password"></p>
                 </div>
 
                 <div class="item">
                     <label for="confirm_password" class="label"><?= __('Confirm password') ?></label>
                     <input id="confirm_password" type="password" name="confirm_password" class="input"
-                           placeholder="<?= __('Please repeat your new password.') ?>">
+                           placeholder="<?= __('Please repeat your new password') ?>">
                     <p class="tip for-confirm_password"></p>
                 </div>
 

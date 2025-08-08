@@ -48,6 +48,16 @@ class Language
             'Send' => '送信',
             'Input your message here' => 'ここにメッセージを入力してください',
             'Save' => '保存します',
+            'Profile' => 'プロファイル',
+            'Current Password' => '現在のパスワード',
+            'New Password' => '新しいパスワード',
+            'Update password' => '更新パスワード',
+            'Ensure your account is using a long, random password to stay secure' => 'アカウントの安全性を保つために、長くランダムなパスワードを使用していることを確認してください',
+            'Please input your current password' => '現在のパスワードを入力してください',
+            'Please input your new password' => '新しいパスワードを入力してください',
+            'Please repeat your new password' => '新しいパスワードを繰り返してください',
+            'Profile information' => 'プロファイル情報',
+            'Update your name and email address' => '名前とメールアドレスを更新します',
         ],
     ];
 
