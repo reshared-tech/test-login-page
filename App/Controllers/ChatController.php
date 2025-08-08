@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Models\ChatModel;
 use App\Models\UserModel;
+use Tools\Config;
+use Tools\Image;
 
 class ChatController extends Controller
 {
@@ -237,6 +239,12 @@ class ChatController extends Controller
                     'message' => 'Some error',
                 ]);
             }
+            if ($_FILES['files']['size'][$k] > Config::upload['max_size']) {
+                json([
+                    'code' => 10001,
+                    'message' => 'The image is too large to upload',
+                ]);
+            }
             if (!in_array($_FILES['files']['type'][$k], $allowedTypes)) {
                 json([
                     'code' => 10001,
@@ -245,18 +253,19 @@ class ChatController extends Controller
             }
         }
 
-        $targetDir = APP_ROOT . '/assets/uploads';
-        if (!file_exists($targetDir)) {
-            mkdir($targetDir, 0755, true);
-        }
+        $imageTool = new Image();
+
         $message = [];
         foreach ($_FILES['files']['name'] as $k => $name) {
-            $ext = explode('.', $name);
-            $path = uniqid(microtime(true)) . '.' . end($ext);
-            $src = 'assets/uploads/' . $path;
-            $target = $targetDir . '/' . $path;
-            if (move_uploaded_file($_FILES['files']['tmp_name'][$k], $target)) {
-                $message[] = "<img class='chat-img' src='$src'>";
+            $name = $imageTool->uniqFilename($name);
+            try {
+                if ($imageTool->formatUpload($name, $_FILES['files']['tmp_name'][$k])) {
+                    $src = $imageTool->fileSrc($name);
+
+                    $message[] = "<img class='chat-img' src='$src'>";
+                }
+            } catch (\Exception $e) {
+
             }
         }
         if (empty($message)) {

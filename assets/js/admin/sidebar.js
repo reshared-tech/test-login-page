@@ -11,6 +11,5 @@ document.addEventListener('DOMContentLoaded', function () {
             a.parentNode.classList = [];
             a.removeEventListener('click', disabled);
         }
-
     });
 });

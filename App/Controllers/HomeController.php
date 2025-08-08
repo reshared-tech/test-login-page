@@ -35,10 +35,14 @@ class HomeController extends Controller
             $lastMessages = $model->getLastMessages($chatIds);
             // Add unread count to each chat
             foreach ($chats as $k => $chat) {
+                $content = $lastMessages[$chat['id']] ?? '';
+                if (strpos($content, '<img ') === 0) {
+                    $content = '[image]';
+                }
                 $chats[$k]['user'] = $username[$usersMap[$chat['id']]] ?? '';
                 $chats[$k]['avatar'] = nameAvatar($chats[$k]['user']);
                 $chats[$k]['unread'] = $unreadMap[$chat['id']] ?? 0;
-                $chats[$k]['content'] = $lastMessages[$chat['id']] ?? '';
+                $chats[$k]['content'] = $content;
                 $chats[$k]['updated_at'] = timeHuman($chat['updated_at']);
             }
         }
