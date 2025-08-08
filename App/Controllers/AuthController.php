@@ -7,6 +7,8 @@ use Tools\Auth;
 
 class AuthController extends Controller
 {
+    protected $checkAuth = false;
+    
     public function login()
     {
         // Only unlogged-in users are allowed to log in

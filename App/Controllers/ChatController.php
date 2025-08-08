@@ -4,58 +4,9 @@ namespace App\Controllers;
 
 use App\Models\ChatModel;
 use App\Models\UserModel;
-use Tools\Auth;
 
 class ChatController extends Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-
-        // Check the user login information
-        Auth::checkAuth();
-    }
-
-    /**
-     * Get all chats for the authorized user
-     */
-    public function chats()
-    {
-        $model = new ChatModel();
-        // Get chats by user ID
-        $chats = $model->getChatByUserId(authorizedUser('id'));
-
-        // Return empty response if no chats found
-        if (empty($chats)) {
-            json([
-                'code' => 10000,
-                'msg' => 'ok',
-                'data' => [
-                    'unread' => 0,
-                    'chats' => [],
-                ],
-            ]);
-        }
-
-        // Calculate unread messages count for each chat
-        $unreadMap = $model->calcUnread(authorizedUser('id'), array_column($chats, 'id'));
-        // Calculate total unread count
-        $unread = array_sum($unreadMap);
-        // Add unread count to each chat
-        foreach ($chats as $k => $chat) {
-            $chats[$k]['unread'] = $unreadMap[$chat['id']] ?? 0;
-        }
-        // Return chats with unread counts
-        json([
-            'code' => 10000,
-            'msg' => 'ok',
-            'data' => [
-                'unread' => $unread,
-                'chats' => $chats,
-            ],
-        ]);
-    }
-
     /**
      * Display a specific chat room
      */

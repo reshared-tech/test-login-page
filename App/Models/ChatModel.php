@@ -85,19 +85,32 @@ class ChatModel extends BaseModel
         return $chats['total'] > 0;
     }
 
-    public function getChatByUserId($userId)
+    public function getChatByUserId($userId, $page = 1, $size = 10)
     {
-        $relations = $this->database->prepare('SELECT `chat_id` FROM `chat_relations` WHERE `user_id` = :user_id AND `deleted_at` IS NULL', [
+        $offset = ($page - 1) * $size;
+        return $this->database->prepare("SELECT `chats`.* FROM `chats`
+        LEFT JOIN `chat_relations` 
+        ON `chat_relations`.`chat_id` = `chats`.`id` 
+        AND `chat_relations`.`deleted_at` IS NULL 
+        WHERE `chat_relations`.`user_id` = :user_id 
+        AND `chats`.`deleted_at` IS NULL 
+        ORDER BY `chats`.`updated_at` DESC 
+        LIMIT $offset,$size", [
             'user_id' => $userId
         ])->findAll();
+    }
 
-        if (empty($relations)) {
-            return [];
-        }
-
-        $chatIds = implode(',', array_unique(array_column($relations, 'chat_id')));
-
-        return $this->database->prepare('SELECT `id`,`hash`,`name`,`updated_at` FROM `chats` WHERE `id` in (' . $chatIds . ') AND `status` = ' . self::CHAT_STATUS_NORMAL . ' AND `deleted_at` IS NULL ORDER BY `updated_at` DESC')->findAll();
+    public function getChatTotalByUserId($userId)
+    {
+        $res = $this->database->prepare("SELECT count(*) as `total` FROM `chats`
+        LEFT JOIN `chat_relations` 
+        ON `chat_relations`.`chat_id` = `chats`.`id` 
+        AND `chat_relations`.`deleted_at` IS NULL 
+        WHERE `chat_relations`.`user_id` = :user_id 
+        AND `chats`.`deleted_at` IS NULL", [
+            'user_id' => $userId
+        ])->find();
+        return (int)$res['total'];
     }
 
     public function calcUnread($userId, $chatIds)
@@ -121,6 +134,19 @@ class ChatModel extends BaseModel
         }
 
         return $result;
+    }
+
+    public function getUsersByChatIds($ownerId, $chatIds)
+    {
+        if (empty($chatIds)) {
+            return [];
+        }
+        $chatIdStr = implode(',', $chatIds);
+        $data = $this->database->prepare("SELECT `chat_id`, `user_id` FROM `chat_relations` WHERE `chat_id` in ($chatIdStr) AND `user_id` != :owner_id AND `deleted_at` IS NULL", [
+            'owner_id' => $ownerId,
+        ])->findAll();
+
+        return array_column($data, 'user_id', 'chat_id');
     }
 
     public function getChatById($chatId, $ignoreStatus = false)
@@ -283,5 +309,22 @@ class ChatModel extends BaseModel
         }
         $chatStr = implode(',', $chatIds);
         return $this->database->prepare("SELECT `chat_id`, `user_id` FROM `chat_relations` WHERE `chat_id` IN ($chatStr) AND deleted_at is NULL")->findAll();
+    }
+
+    public function getLastMessages($chatIds)
+    {
+        if (empty($chatIds)) {
+            return [];
+        }
+        $chatStr = implode(',', $chatIds);
+        $data = $this->database->prepare("SELECT `chat_messages`.* FROM `chat_messages` 
+        INNER JOIN (
+            SELECT `user_id`, MAX(`id`) as `last_id` FROM `chat_messages` 
+            WHERE `chat_id` in ($chatStr)
+            AND `deleted_at` IS NULL 
+            GROUP BY `user_id`
+       ) `latest`
+       ON `chat_messages`.`id` = `latest`.`last_id`")->findAll();
+        return array_column($data, 'content', 'chat_id');
     }
 }

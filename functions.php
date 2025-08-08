@@ -190,3 +190,44 @@ function authorizedUser(?string $key = null)
 {
     return \Tools\Auth::user($key);
 }
+
+function timeHuman($time)
+{
+    $now = time();
+    $today = strtotime(date('Y-m-d 00:00:00'));
+    $time = is_numeric($time) ? $time : strtotime($time);
+    if ($time >= $today) {
+        if ($now - $time < 60) {
+            return 'Just now';
+        }
+        if ($now - $time < 3600) {
+            return ceil(($now - $time) / 60) . ' Mins ago';
+        }
+        return date('H:i', $time);
+    }
+
+    $yesterday = strtotime(date('Y-m-d 00:00:00', strtotime('-1 day')));
+    if ($time >= $yesterday) {
+        return 'Yesterday ' . date('H:i', $time);
+    }
+
+    $thisYear = strtotime(date('Y-01-01 00:00:00'));
+    if ($time >= $thisYear) {
+        return date('m-d H');
+    }
+
+    return date('Y-m-d');
+}
+
+function nameAvatar($name)
+{
+    if (empty($name)) {
+        return '-';
+    }
+    $parts = explode(' ', $name, 2);
+    $res = [];
+    foreach ($parts as $part) {
+        $res[] = strtoupper($part[0]);
+    }
+    return implode('', $res);
+}
