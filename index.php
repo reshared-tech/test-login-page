@@ -14,6 +14,7 @@ require APP_ROOT . '/functions.php';
 $router = new Tools\Router();
 
 // Add routes
+$router->get('/index', [\App\Controllers\HomeController::class, 'test']);
 $router->get('/', [\App\Controllers\HomeController::class, 'index']);
 $router->get('/login', [\App\Controllers\AuthController::class, 'login']);
 $router->post('/login', [\App\Controllers\AuthController::class, 'loginSubmit']);

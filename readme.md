@@ -66,6 +66,7 @@
         - auth.js  `Auth-related JavaScript logic`
         - password.js `Change password related logic`
         - profile.js  `Change user profile info related logic`
+        - vue@3.5.18.js  `Vue js production file`
     - css  `CSS files`
         - styles.css  `All style definitions`
         - admin.css   `Styles about admin page`
@@ -249,3 +250,7 @@ const upload = [
 ### Upload image when chatting, will limit size of image
 
 ![limit_image_size](videos/20-limit_image_size.mp4 "limit_image_size")
+
+## New Page in 8.12
+### Index Page
+![index_page](videos/21-index-page.mp4 "index_page")

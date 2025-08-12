@@ -7,6 +7,13 @@ use App\Models\UserModel;
 
 class HomeController extends Controller
 {
+    public function test()
+    {
+        view('test', [
+            'title' => 'Index Page',
+        ]);
+    }
+
     public function index()
     {
         $size = 10;
