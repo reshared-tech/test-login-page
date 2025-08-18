@@ -10,7 +10,9 @@ class Router
     public function __construct()
     {
         $path = parse_url(trim(Config::domain, '/'), PHP_URL_PATH);
-        self::$basePath = $path ?? '/';
+        if ($path) {
+            self::$basePath = $path . '/';
+        }
     }
 
     protected function parseUri()
@@ -18,10 +20,7 @@ class Router
         // Parse the request URI to get path segments as an array
         $uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         if (self::$basePath !== '/') {
-            $uriPath = rtrim(str_replace(self::$basePath, '', $uriPath), '/');
-            if ($uriPath === '') {
-                $uriPath = '/';
-            }
+            $uriPath = '/' . trim(str_replace(self::$basePath, '', $uriPath), '/');
         }
         return $uriPath;
     }

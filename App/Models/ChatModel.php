@@ -19,15 +19,15 @@ class ChatModel extends BaseModel
     /**
      * @throws Exception
      */
-    public function newChat($userId, $anotherUserId)
+    public function newChat($name, $userIds)
     {
         $chatData = [
             'hash' => uuid(),
-            'name' => '新しいチャット',
+            'name' => $name,
             'status' => self::CHAT_STATUS_NORMAL,
             'creator_id' => authorizedUser('id'),
             'creator_type' => self::CREATOR_TYPE_ADMIN,
-            'users_count' => 2,
+            'users_count' => count($userIds),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ];
@@ -39,10 +39,11 @@ class ChatModel extends BaseModel
             throw new Exception('Create new chat failed');
         }
 
-        [$sql, $data] = $this->parseInsert('chat_relations', [
-            ['chat_id' => $chatData['id'], 'user_id' => $userId, 'created_at' => date('Y-m-d H:i:s')],
-            ['chat_id' => $chatData['id'], 'user_id' => $anotherUserId, 'created_at' => date('Y-m-d H:i:s')],
-        ]);
+        $inserts = [];
+        foreach ($userIds as $userId) {
+            $inserts[] = ['chat_id' => $chatData['id'], 'user_id' => $userId, 'created_at' => date('Y-m-d H:i:s')];
+        }
+        [$sql, $data] = $this->parseInsert('chat_relations', $inserts);
 
         if ($this->database->prepare($sql, $data)) {
             return $chatData;
@@ -225,7 +226,7 @@ class ChatModel extends BaseModel
     public function getReadMap($messageIds, $chatId, $ignoreStatus = false)
     {
         if (empty($messageIds)) {
-            return [[], 0];
+            return [[], 0, []];
         }
 
         if ($ignoreStatus) {
@@ -322,7 +323,7 @@ class ChatModel extends BaseModel
             SELECT `user_id`, MAX(`id`) as `last_id` FROM `chat_messages` 
             WHERE `chat_id` in ($chatStr)
             AND `deleted_at` IS NULL 
-            GROUP BY `user_id`
+            GROUP BY `user_id`,`chat_id`
        ) `latest`
        ON `chat_messages`.`id` = `latest`.`last_id`")->findAll();
         return array_column($data, 'content', 'chat_id');

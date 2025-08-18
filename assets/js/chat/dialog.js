@@ -84,7 +84,6 @@ function updateUnreadStatuses(unreadData) {
  */
 function getReadStatusText(readCount) {
     if (readCount === 0) return '既読です'; // Read
-    if (readCount === 1) return '未読です'; // Unread
     return `${readCount}人未読です`; // X people unread
 }
 
@@ -286,7 +285,7 @@ function handleSuccessfulSend(data) {
 
     box.innerHTML += `
         <div class="message-right">
-            <span id="read-${data.message_id}" class="status">未読です</span>
+            <span id="read-${data.message_id}" class="status">送信中です</span>
             <div class="message-me">
                 <pre class="content">${data.content}</pre>
                 <p class="time">${data.created_at}</p>

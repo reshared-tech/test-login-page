@@ -37,7 +37,7 @@ class ChatController extends Controller
 
         // Show the chat page with chat data
         view('chat', [
-            'title' => 'Chat Room',
+            'title' => $chat['name'] . ' - Chat Room',
             'chat' => $chat
         ]);
     }

@@ -99,4 +99,9 @@ class UserModel extends BaseModel
     {
         return $this->getList('users', $page, $size);
     }
+
+    public function getUserAllList()
+    {
+        return $this->database->prepare("SELECT `id`,`name`,`email` FROM `users` ORDER BY `id`")->findAll();
+    }
 }

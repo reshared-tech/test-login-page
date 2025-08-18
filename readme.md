@@ -74,6 +74,14 @@
 - videos     `Some images for readme file, ***Unrelated*** to code`
 - migrations  `Database migrations sql files`
 - readme.md  `Project documentation`
+- lp `Landing Page Projects`
+  - 1 `Video Project`
+    - css
+      - index.css  `Landing Page Css file`
+    - js 
+      - index.js  `Landing Page Js file`
+    - img         `Landing Page Images`
+    - index.html  `Landing Page File`
 
 ### about administrator
 
@@ -254,3 +262,10 @@ const upload = [
 ## New Page in 8.12
 ### Index Page
 ![index_page](videos/21-index-page.mp4 "index_page")
+
+## Change in 8.18
+### Independent Landing Page Projects
+![Independent Landing Page Projects](videos/22-Independent%20Landing%20Page%20Projects.mp4 "Independent Landing Page Projects")
+
+### Create a new multi-person chat room
+![multi-person chat room](videos/23-multi-person%20chat%20room.mp4 "multi-person chat room")

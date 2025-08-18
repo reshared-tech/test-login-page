@@ -31,4 +31,11 @@ class UserController extends Controller
             'size' => $size,
         ]);
     }
+
+    public function usersApiList()
+    {
+        $userModel = new UserModel();
+        $data = $userModel->getUserAllList();
+        json($data);
+    }
 }

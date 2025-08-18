@@ -47,7 +47,7 @@ class Auth
         unset($_SESSION[self::$name]);
     }
 
-    public static function checkAuth($to = '/login')
+    public static function checkAuth($to = 'login')
     {
         if (!self::isAuthorized()) {
             redirect($to);
@@ -57,7 +57,10 @@ class Auth
     public static function checkGuest($to = '/')
     {
         if (self::isAuthorized()) {
-            redirect($_SERVER['HTTP_REFERER'] ?: $to);
+            if ($to === '/') {
+                $to = Router::$basePath;
+            }
+            redirect($_SERVER['HTTP_REFERER'] ?? $to);
         }
     }
 }

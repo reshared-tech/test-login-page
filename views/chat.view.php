@@ -3,7 +3,7 @@
     <div class="container">
         <div class="card middle-card">
             <div class="header">
-                <h1 class="title"><?= __('Chat Room') ?></h1>
+                <h1 class="title"><?= $chat['name'] ?></h1>
             </div>
 
             <div id="messages">

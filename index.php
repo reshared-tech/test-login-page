@@ -14,7 +14,6 @@ require APP_ROOT . '/functions.php';
 $router = new Tools\Router();
 
 // Add routes
-$router->get('/index', [\App\Controllers\HomeController::class, 'test']);
 $router->get('/', [\App\Controllers\HomeController::class, 'index']);
 $router->get('/login', [\App\Controllers\AuthController::class, 'login']);
 $router->post('/login', [\App\Controllers\AuthController::class, 'loginSubmit']);
@@ -33,6 +32,7 @@ $router->post('/api/upload', [\App\Controllers\ChatController::class, 'upload'])
 $router->get('/admin', [\Admin\Controllers\HomeController::class, 'dashboard']);
 $router->get('/admin/logout', [\Admin\Controllers\HomeController::class, 'logout']);
 $router->get('/admin/users', [\Admin\Controllers\UserController::class, 'users']);
+$router->get('/admin/api/users', [\Admin\Controllers\UserController::class, 'usersApiList']);
 $router->get('/admin/chats', [\Admin\Controllers\ChatController::class, 'index']);
 $router->get('/admin/chat', [\Admin\Controllers\ChatController::class, 'show']);
 $router->post('/admin/chat', [\Admin\Controllers\ChatController::class, 'store']);

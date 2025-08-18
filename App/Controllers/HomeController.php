@@ -7,13 +7,6 @@ use App\Models\UserModel;
 
 class HomeController extends Controller
 {
-    public function test()
-    {
-        view('test', [
-            'title' => 'Index Page',
-        ]);
-    }
-
     public function index()
     {
         $size = 10;
@@ -34,10 +27,6 @@ class HomeController extends Controller
             $chatIds = array_column($chats, 'id');
             // Calculate unread messages count for each chat
             $unreadMap = $model->calcUnread(authorizedUser('id'), $chatIds);
-            // Get users of chats
-            $usersMap = $model->getUsersByChatIds(authorizedUser('id'), $chatIds);
-            // Get users name
-            $username = $userModel->getUsersNameByIds($usersMap);
             // Get last messages
             $lastMessages = $model->getLastMessages($chatIds);
             // Add unread count to each chat
@@ -46,8 +35,8 @@ class HomeController extends Controller
                 if (strpos($content, '<img ') === 0) {
                     $content = '[image]';
                 }
-                $chats[$k]['user'] = $username[$usersMap[$chat['id']]] ?? '';
-                $chats[$k]['avatar'] = nameAvatar($chats[$k]['user']);
+                $chats[$k]['user'] = $chat['name'];
+                $chats[$k]['avatar'] = nameAvatar($chat['name']);
                 $chats[$k]['unread'] = $unreadMap[$chat['id']] ?? 0;
                 $chats[$k]['content'] = $content;
                 $chats[$k]['updated_at'] = timeHuman($chat['updated_at']);

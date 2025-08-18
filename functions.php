@@ -130,7 +130,9 @@ function base_tag(): string
  */
 function redirect(string $to = '/'): void
 {
-    header('Location: ' . \Tools\Router::$basePath . $to);
+    $to = str_replace('//', '/', \Tools\Router::$basePath . $to);
+
+    header('Location: ' . $to);
     exit;
 }
 
@@ -227,7 +229,8 @@ function nameAvatar($name)
     $parts = explode(' ', $name, 2);
     $res = [];
     foreach ($parts as $part) {
-        $res[] = strtoupper($part[0]);
+        $letter = mb_substr($part, 0, 1, 'utf8');
+        $res[] = $letter;
     }
     return implode('', $res);
 }
