@@ -41,10 +41,12 @@
         - 404.view.php    `404 Page`
         - 500.view.php    `Server 500 Error Page`
     - admin
+        - user               `Users view files`
+            - list.view.php   `Users list view file`
+            - show.view.php   `User info view file`
         - sidebar.view.php    `Sidebar tempalte`
         - paginator.view.php   `Paginator tempalte`
         - dashboard.view.php  `Admin dashboard page template`
-        - users.view.php       `Users list dashboard page template`
         - chats.view.php       `Chats list dashboard page template`
         - messages.view.php    `Chat Messages list dashboard page template`
     - home.view.php  `Home page template (after login)`
