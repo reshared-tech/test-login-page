@@ -230,6 +230,9 @@ function nameAvatar($name)
     $res = [];
     foreach ($parts as $part) {
         $letter = mb_substr($part, 0, 1, 'utf8');
+        if (preg_match('/^[a-z]+$/', $letter) === 1) {
+            $letter = strtoupper($letter);
+        }
         $res[] = $letter;
     }
     return implode('', $res);

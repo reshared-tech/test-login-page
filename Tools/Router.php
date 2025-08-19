@@ -70,15 +70,39 @@ class Router
         $method = strtoupper($_SERVER['REQUEST_METHOD']);
 
         if (isset($this->routes[$uriPath][$method])) {
-            try {
-                $class = $this->routes[$uriPath][$method][0];
-
-                call_user_func([new $class(), $this->routes[$uriPath][$method][1]]);
-            } catch (\Exception $e) {
-                dd($e->getMessage());
-            }
+            $this->call($this->routes[$uriPath][$method][0], $this->routes[$uriPath][$method][1]);
         } else {
+            foreach ($this->routes as $path => $route) {
+                if (!isset($route[$method]) || strpos($path, '/:') === false) {
+                    continue;
+                }
+                preg_match_all('/\/(:\w+)/s', $path, $matches);
+                $pattern = str_replace($matches[1], '([\w|\d]+)', $path);
+                $pattern = str_replace('/', '\/', $pattern);
+                preg_match("/$pattern/s", $uriPath, $res);
+                if ($res[0] != $uriPath) {
+                    continue;
+                }
+                $params = [];
+                foreach ($matches[1] as $n => $param) {
+                    if (isset($res[$n + 1])) {
+                        $params[trim($param, ':')] = $res[$n + 1];
+                    }
+                }
+                $this->call($route[$method][0], $route[$method][1], $params);
+                exit;
+            }
+
             require APP_ROOT . '/views/errors/404.view.php';
+        }
+    }
+
+    private function call($class, $method, $params = [])
+    {
+        try {
+            call_user_func_array([new $class(), $method], $params);
+        } catch (\Exception $e) {
+            dd($e->getMessage());
         }
     }
 }
