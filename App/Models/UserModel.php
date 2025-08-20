@@ -102,6 +102,6 @@ class UserModel extends BaseModel
 
     public function getUserAllList()
     {
-        return $this->database->prepare("SELECT `id`,`name`,`email` FROM `users` ORDER BY `id`")->findAll();
+        return $this->database->prepare("SELECT `id`,`name`,`email` FROM `users` WHERE `status` > 0 ORDER BY `id`")->findAll();
     }
 }
