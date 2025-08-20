@@ -144,9 +144,6 @@ function redirect(string $to = '/'): void
 function json(array $data): void
 {
     header('Content-Type: application/json');
-    if (isset($data['message'])) {
-        $data['message'] = \Tools\Language::show($data['message']);
-    }
     exit(json_encode($data));
 }
 
