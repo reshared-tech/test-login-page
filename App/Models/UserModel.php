@@ -89,6 +89,16 @@ class UserModel extends BaseModel
         return array_column($data, 'name', 'id');
     }
 
+    public function getUsersInfoByIds($ids)
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $idStr = implode(',', $ids);
+        return $this->database->prepare('SELECT * FROM  `users` WHERE `id` in (' . $idStr . ')')->findAll();
+    }
+
 
     public function getUserTotal()
     {

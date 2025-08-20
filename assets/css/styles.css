@@ -370,6 +370,14 @@ a {
     flex-direction: column;
 }
 
+.gap-1 {
+    gap: .5rem;
+}
+
+.items-top {
+    align-items: start !important;
+}
+
 .items-center {
     align-items: center;
 }

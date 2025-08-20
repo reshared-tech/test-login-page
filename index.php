@@ -36,7 +36,8 @@ $router->get('/admin/users/:id', [\Admin\Controllers\UserController::class, 'sho
 $router->get('/admin/api/users', [\Admin\Controllers\UserController::class, 'usersApiList']);
 $router->post('/admin/api/users/lock', [\Admin\Controllers\UserController::class, 'lockUser']);
 $router->get('/admin/chats', [\Admin\Controllers\ChatController::class, 'index']);
-$router->get('/admin/chat', [\Admin\Controllers\ChatController::class, 'show']);
+$router->get('/admin/chat', [\Admin\Controllers\ChatController::class, 'messages']);
+$router->get('/admin/chats/:id', [\Admin\Controllers\ChatController::class, 'show']);
 $router->post('/admin/chat', [\Admin\Controllers\ChatController::class, 'store']);
 
 $router->dispatch();

@@ -16,7 +16,7 @@
                     <th><?= __('Users') ?></th>
                     <th><?= __('Status') ?></th>
                     <th><?= __('CreatedAt') ?></th>
-                    <th><?= __('Action') ?></th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,7 +29,10 @@
                         </td>
                         <td><?= $datum['status'] ?></td>
                         <td><?= $datum['created_at'] ?></td>
-                        <td><a class="action-btn" href="admin/chat?id=<?= $datum['id'] ?>">チャットの記録です</a></td>
+                        <td>
+                            <a class="link" href="admin/chat?id=<?= $datum['id'] ?>">チャットの記録です</a>
+                            <a class="link" href="admin/chats/<?= $datum['id'] ?>">会話の詳細です</a>
+                        </td>
                     </tr>
                 <?php endforeach ?>
                 </tbody>

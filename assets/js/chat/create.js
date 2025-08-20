@@ -7,23 +7,37 @@ const form = document.getElementById('form');
 const name = document.getElementById('name');
 let users = {};
 let selectedUser = {};
+let chatId = 0;
 
-createBtn.addEventListener('click', function () {
-    modal.style.display = 'flex';
+if (createBtn) {
+    createBtn.addEventListener('click', function () {
+        modal.style.display = 'flex';
+        loadUsers();
+    });
+}
 
+function loadUsers(selected = [])
+{
+    selectedUser = {};
     if (Object.keys(users).length === 0) {
         fetch('admin/api/users').then(res => res.json()).then(res => {
             res.map(item => {
                 users[item.id] = item;
+                if (selected.indexOf(item.id) > -1) {
+                    selectedUser[item.id] = item;
+                }
             })
-            selectedUser = {};
             updateOptions();
         });
     } else {
-        selectedUser = {};
+        Object.keys(users).map(id => {
+            if (selected.indexOf(id) > -1) {
+                selectedUser[item.id] = item;
+            }
+        })
         updateOptions();
     }
-});
+}
 
 function removeUser(id) {
     delete selectedUser[id];
@@ -64,6 +78,13 @@ function createChat() {
             tip.style.display = 'block';
         }
     })
+}
+
+function manageMember(id, selected)
+{
+    chatId = id;
+    modal.style.display = 'flex';
+    loadUsers(selected);
 }
 
 function updateOptions() {

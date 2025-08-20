@@ -399,7 +399,7 @@ a {
     overflow-y: auto;
 }
 
-#users-box .one-user {
+.one-user {
     display: flex;
     align-items: center;
     padding: .6rem 1.5rem;
@@ -407,7 +407,7 @@ a {
     border-radius: .5rem;
 }
 
-#users-box .one-user .avatar {
+.one-user .avatar {
     width: 2.5rem;
     height: 2.5rem;
     display: flex;
@@ -420,7 +420,7 @@ a {
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
-#users-box .one-user .username {
+.one-user .username {
     display: flex;
     flex-direction: column;
     gap: .3rem;
@@ -428,12 +428,12 @@ a {
     flex: 1;
 }
 
-#users-box .one-user .username .email {
+.one-user .username .email {
     font-size: .8rem;
     color: #6b7280;
 }
 
-#users-box .one-user .close {
+.one-user .close {
     color: #f8a1a1;
     font-size: .75rem;
     cursor: pointer;

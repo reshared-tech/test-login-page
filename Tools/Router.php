@@ -80,7 +80,7 @@ class Router
                 $pattern = str_replace($matches[1], '([\w|\d]+)', $path);
                 $pattern = str_replace('/', '\/', $pattern);
                 preg_match("/$pattern/s", $uriPath, $res);
-                if ($res[0] != $uriPath) {
+                if (!$res || $res[0] != $uriPath) {
                     continue;
                 }
                 $params = [];

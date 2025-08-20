@@ -312,6 +312,13 @@ class ChatModel extends BaseModel
         return $this->database->prepare("SELECT `chat_id`, `user_id` FROM `chat_relations` WHERE `chat_id` IN ($chatStr) AND deleted_at is NULL")->findAll();
     }
 
+    public function getUserIdsByChatId($id)
+    {
+        $data = $this->database->prepare("SELECT `user_id` FROM `chat_relations` WHERE `chat_id` = {$id} AND deleted_at is NULL")->findAll();
+
+        return array_column($data, 'user_id');
+    }
+
     public function getLastMessages($chatIds)
     {
         if (empty($chatIds)) {

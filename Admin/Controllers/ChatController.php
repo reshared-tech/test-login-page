@@ -2,6 +2,7 @@
 
 namespace Admin\Controllers;
 
+use Admin\Models\AdministratorModel;
 use App\Models\ChatModel;
 use App\Models\UserModel;
 
@@ -35,7 +36,7 @@ class ChatController extends Controller
             $data[$k]['status'] = ChatModel::STATUS_MAP[$datum['status']];
         }
 
-        view('admin.chats', [
+        view('admin.chat.list', [
             'heads' => [
                 '<link rel="stylesheet" href="assets/css/admin.css">'
             ],
@@ -47,7 +48,39 @@ class ChatController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
+    {
+        $model = new ChatModel();
+        $userModel = new UserModel();
+        $chat = $model->getChatById($id, true);
+
+        if ($chat['creator_type']) {
+            $user = $userModel->getUserById($chat['creator_id']);
+            $chat['creator'] = 'User: ' . $user['name'];
+        } else {
+            $adminModel = new AdministratorModel();
+            $admin = $adminModel->getById($chat['creator_id']);
+            $chat['creator'] = 'Administrator: ' . $admin['name'];
+        }
+
+        $members = $userModel->getUsersInfoByIds(
+            $model->getUserIdsByChatId($id)
+        );
+        foreach ($members as $k => $member) {
+            $members[$k]['avatar'] = nameAvatar($member['name']);
+        }
+
+        view('admin.chat.show', [
+            'heads' => [
+                '<link rel="stylesheet" href="assets/css/admin.css">'
+            ],
+            'title' => 'Chat Info',
+            'chat' => $chat,
+            'members' => $members,
+        ]);
+    }
+
+    public function messages()
     {
         $chatId = $this->validator->number($_GET, 'id');
         if (empty($chatId)) {
