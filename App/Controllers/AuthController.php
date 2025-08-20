@@ -50,7 +50,15 @@ class AuthController extends Controller
         if (!$user) {
             json([
                 'code' => 10003,
-                'message' => 'Email not registered. Please register first.',
+                'message' => 'メール登録されていない。まずレジスタください。',
+            ]);
+        }
+
+        // Check user's status.
+        if ($user['status'] == 0) {
+            json([
+                'code' => 10004,
+                'message' => 'すみません、口座がロックされていますので、管理人に連絡してください',
             ]);
         }
 
@@ -58,7 +66,7 @@ class AuthController extends Controller
         if ($user['failed_count'] >= 10 && time() - strtotime($user['updated_at']) < 600) {
             json([
                 'code' => 10004,
-                'message' => 'Account locked. Try again in 10 minutes.',
+                'message' => '口座ロックされてる10分後にもう一度お試しください。',
             ]);
         }
 
@@ -74,7 +82,7 @@ class AuthController extends Controller
 
             json([
                 'code' => 10003,
-                'message' => 'Incorrect password',
+                'message' => '正しくないパスワード',
             ]);
         }
 
@@ -94,7 +102,7 @@ class AuthController extends Controller
 
         json([
             'code' => 10000,
-            'message' => 'Login successful',
+            'message' => '登録成功',
         ]);
     }
 
