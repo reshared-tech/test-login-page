@@ -7,7 +7,7 @@
                 <h1 class="title">500</h1>
                 <p class="subtitle"><?= __('Oops, 500') ?></p>
                 <p><?= $message ?? 'Something Wrong!' ?></p>
-                <p><a href="/" class="link"><?= __('Go Home') ?></a></p>
+                <p><a href="" class="link"><?= __('Go Home') ?></a></p>
             </div>
         </div>
     </div>

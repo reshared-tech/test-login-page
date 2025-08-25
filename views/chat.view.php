@@ -11,7 +11,11 @@
             </div>
 
             <input id="upload" type="file" multiple accept="image/*" style="display: none">
-            <textarea id="input" class="textarea" placeholder="<?= __('Input your message here') ?>"></textarea>
+            <?php if ($chat['status']): ?>
+                <textarea id="input" class="textarea" placeholder="<?= __('Input your message here') ?>"></textarea>
+            <?php else: ?>
+                <textarea id="input" class="textarea" disabled placeholder="<?= __('Chat has been locked!') ?>"></textarea>
+            <?php endif ?>
             <p id="tip" class="tip"></p>
             <div style="display: flex;align-items: center">
                 <button id="send-btn" class="action-btn action-btn-edit"><?= __('Send') ?></button>

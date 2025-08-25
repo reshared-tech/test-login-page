@@ -6,7 +6,7 @@
             <div class="header">
                 <h1 class="title">404</h1>
                 <p class="subtitle"><?= __('Oops, 404') ?></p>
-                <p><a href="/" class="link"><?= __('Go Home') ?></a></p>
+                <p><a href="" class="link"><?= __('Go Home') ?></a></p>
             </div>
         </div>
     </div>

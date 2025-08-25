@@ -182,9 +182,8 @@ class ChatModel extends BaseModel
 
     public function getChatByHash($hash)
     {
-        return $this->database->prepare('SELECT * FROM `chats` WHERE `hash` = :hash AND `status` = :status AND `deleted_at` IS NULL', [
+        return $this->database->prepare('SELECT * FROM `chats` WHERE `hash` = :hash AND `deleted_at` IS NULL', [
             'hash' => $hash,
-            'status' => self::CHAT_STATUS_NORMAL,
         ])->find();
     }
 

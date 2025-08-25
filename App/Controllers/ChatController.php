@@ -17,7 +17,7 @@ class ChatController extends Controller
         // Get chat hash from GET parameter
         $hash = $this->validator->string($_GET, 'h');
         if (empty($hash)) {
-            view('404');
+            view('errors.404');
             return;
         }
 
@@ -25,13 +25,13 @@ class ChatController extends Controller
         // Get chat info by hash
         $chat = $model->getChatByHash($hash);
         if (empty($chat)) {
-            view('404');
+            view('errors.404');
             return;
         }
 
         // Check if user has permission to access this chat
         if (!$model->checkRelation($chat['id'], authorizedUser('id'))) {
-            view('404');
+            view('errors.404');
             return;
         }
 
