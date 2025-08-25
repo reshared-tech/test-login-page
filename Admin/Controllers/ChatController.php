@@ -5,6 +5,7 @@ namespace Admin\Controllers;
 use Admin\Models\AdministratorModel;
 use App\Models\ChatModel;
 use App\Models\UserModel;
+use Exception;
 
 class ChatController extends Controller
 {
@@ -164,7 +165,7 @@ class ChatController extends Controller
         $model = new ChatModel();
         try {
             if ($id) {
-                $chat = $model->updateById($id, ['name' => $data['name'], 'users_count' => count($data['users'])]);
+                $chat = $model->updateChat($id, $data['name'], $data['users']);
             } else {
                 // Attempt to create new chat
                 $chat = $model->newChat($data['name'], $data['users']);
@@ -182,7 +183,7 @@ class ChatController extends Controller
                 'code' => 10003,
                 'message' => 'Failed to create chat',
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             json([
                 'code' => 10003,
                 'message' => $e->getMessage(),

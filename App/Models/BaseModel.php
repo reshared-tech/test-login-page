@@ -64,7 +64,7 @@ abstract class BaseModel
 
         $valStr = implode(',', $values);
 
-        $sql = "INSERT INTO `$table`($fields) VALUES $valStr";
+        $sql = "INSERT IGNORE INTO `$table`($fields) VALUES $valStr";
 
         return [$sql, $result];
     }

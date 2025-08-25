@@ -35,6 +35,18 @@ class ChatModel extends BaseModel
     /**
      * @throws Exception
      */
+    public function updateChat($id, $name, $userIds)
+    {
+        if (!$this->updateById($id, ['name' => $name, 'users_count' => count($userIds)])) {
+            throw new Exception('update chat failed');
+        }
+        $this->addRelations($id, $userIds, true);
+        return true;
+    }
+
+    /**
+     * @throws Exception
+     */
     public function newChat($name, $userIds)
     {
         $chatData = [
@@ -55,17 +67,36 @@ class ChatModel extends BaseModel
             throw new Exception('Create new chat failed');
         }
 
-        $inserts = [];
-        foreach ($userIds as $userId) {
-            $inserts[] = ['chat_id' => $chatData['id'], 'user_id' => $userId, 'created_at' => date('Y-m-d H:i:s')];
-        }
-        [$sql, $data] = $this->parseInsert('chat_relations', $inserts);
-
-        if ($this->database->prepare($sql, $data)) {
+        if ($this->addRelations($chatData['id'], $userIds)) {
             return $chatData;
         }
 
         return false;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function addRelations($chatId, $userIds, $update = false)
+    {
+        if (count($userIds) < 2) {
+            throw new Exception('at least 2 users');
+        }
+        $now = date('Y-m-d H:i:s');
+        $inserts = [];
+        foreach ($userIds as $userId) {
+            $inserts[] = ['chat_id' => $chatId, 'user_id' => $userId, 'created_at' => $now];
+        }
+        [$sql, $data] = $this->parseInsert('chat_relations', $inserts);
+        if (!$this->database->execute($sql, $data)) {
+            throw new Exception('add relations failed');
+        }
+        if ($update) {
+            $userIdStr = implode(',', $userIds);
+            $this->database->execute("UPDATE `chat_relations` SET `deleted_at` = NULL WHERE `chat_id` = $chatId AND `user_id` IN ($userIdStr) AND `deleted_at` IS NOT NULL");
+            $this->database->execute("UPDATE `chat_relations` SET `deleted_at` = '$now' WHERE `chat_id` = $chatId AND `user_id` NOT IN ($userIdStr) AND `deleted_at` IS NULL");
+        }
+        return true;
     }
 
     public function isExists($userId, $anotherUserId)
