@@ -35,6 +35,8 @@ $router->get('/admin/users', [\Admin\Controllers\UserController::class, 'index']
 $router->get('/admin/users/:id', [\Admin\Controllers\UserController::class, 'show']);
 $router->get('/admin/api/users', [\Admin\Controllers\UserController::class, 'usersApiList']);
 $router->post('/admin/api/users/lock', [\Admin\Controllers\UserController::class, 'lockUser']);
+$router->post('/admin/api/chats/lock', [\Admin\Controllers\ChatController::class, 'LockChat']);
+$router->delete('/admin/api/chats/:id', [\Admin\Controllers\ChatController::class, 'delete']);
 $router->get('/admin/chats', [\Admin\Controllers\ChatController::class, 'index']);
 $router->get('/admin/chat', [\Admin\Controllers\ChatController::class, 'messages']);
 $router->get('/admin/chats/:id', [\Admin\Controllers\ChatController::class, 'show']);

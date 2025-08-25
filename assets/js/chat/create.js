@@ -16,8 +16,36 @@ if (createBtn) {
     });
 }
 
-function loadUsers(selected = [])
-{
+if (closeBtn) {
+    closeBtn.addEventListener('click', function () {
+        modal.style.display = 'none';
+    });
+}
+
+
+if (optionsBox) {
+    optionsBox.addEventListener('input', function (e) {
+        if (e.target.value === '0') {
+            return;
+        }
+        if (selectedUser[e.target.value]) {
+            delete selectedUser[e.target.value];
+        } else {
+            selectedUser[e.target.value] = users[e.target.value];
+        }
+        updateOptions();
+    });
+}
+
+if (name) {
+    name.addEventListener('input', function () {
+        const tip = document.getElementsByClassName('for-name').item(0);
+        tip.innerText = '';
+        tip.style.display = 'none';
+    });
+}
+
+function loadUsers(selected = []) {
     selectedUser = {};
     if (Object.keys(users).length === 0) {
         fetch('admin/api/users').then(res => res.json()).then(res => {
@@ -62,12 +90,17 @@ function createChat() {
         return;
     }
 
+    const body = {
+        name: name.value.trim(),
+        users: Object.keys(selectedUser),
+    };
+    if (typeof theChatId !== 'undefined' && theChatId) {
+        body.id = theChatId;
+    }
+
     fetch(form.action, {
         method: 'POST',
-        body: JSON.stringify({
-            name: name.value.trim(),
-            users: Object.keys(selectedUser),
-        })
+        body: JSON.stringify(body)
     }).then(res => res.json()).then(res => {
         if (res.code === 10000) {
             alert(res.message);
@@ -80,14 +113,22 @@ function createChat() {
     })
 }
 
-function manageMember(id, selected)
-{
-    chatId = id;
+function manageMember() {
+    if (!theChatId) {
+        return;
+    }
+    if (theChatName) {
+        document.getElementById('name').value = theChatName;
+    }
+    chatId = theChatId;
     modal.style.display = 'flex';
-    loadUsers(selected);
+    loadUsers(chatUserIds);
 }
 
 function updateOptions() {
+    if (!optionsBox) {
+        return;
+    }
     const options = ['<option value="0">Please select</option>'];
     Object.keys(users).map(id => {
         const item = users[id];
@@ -96,7 +137,7 @@ function updateOptions() {
         } else {
             options.push(`<option value="${id}">${item.name} [${item.email}]</option>`)
         }
-    })
+    });
     optionsBox.innerHTML = options.join('');
 
     const usersShow = [];
@@ -116,25 +157,3 @@ function updateOptions() {
     tip.innerText = '';
     tip.style.display = 'none';
 }
-
-closeBtn.addEventListener('click', function () {
-    modal.style.display = 'none';
-});
-
-optionsBox.addEventListener('input', function (e) {
-    if (e.target.value === '0') {
-        return;
-    }
-    if (selectedUser[e.target.value]) {
-        delete selectedUser[e.target.value];
-    } else {
-        selectedUser[e.target.value] = users[e.target.value];
-    }
-    updateOptions();
-});
-
-name.addEventListener('input', function () {
-    const tip = document.getElementsByClassName('for-name').item(0);
-    tip.innerText = '';
-    tip.style.display = 'none';
-});

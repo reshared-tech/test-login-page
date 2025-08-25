@@ -65,24 +65,6 @@ class UserController extends Controller
         }
     }
 
-    public function unLockUser()
-    {
-        $id = $this->validator->number($_POST, 'id');
-
-        $userModel = new UserModel();
-        if ($userModel->updateById($id, ['status' => 1])) {
-            json([
-                'code' => 10000,
-                'message' => 'ok'
-            ]);
-        } else {
-            json([
-                'code' => 10002,
-                'message' => 'failed'
-            ]);
-        }
-    }
-
     public function usersApiList()
     {
         $userModel = new UserModel();

@@ -1,19 +1,20 @@
-const modal = document.getElementById('modal');
+const lockModal = document.getElementById('lock-modal');
+const question = document.getElementById('question');
 let userId = 0;
 let lock = 'true';
 
 function lockUser(uid) {
     userId = uid;
     lock = 'true';
-    document.getElementById('question').innerText = 'Confirm to lock this user?';
-    modal.style.display = 'flex';
+    question.innerText = 'Confirm to lock this user?';
+    lockModal.style.display = 'flex';
 }
 
 function unLockUser(uid) {
     userId = uid;
     lock = 'false';
-    document.getElementById('question').innerText = 'Confirm to unlock this user?';
-    modal.style.display = 'flex';
+    question.innerText = 'Confirm to unlock this user?';
+    lockModal.style.display = 'flex';
 }
 
 function confirm() {
@@ -35,6 +36,6 @@ function confirm() {
 }
 
 function cancel() {
-    modal.style.display = 'none';
+    lockModal.style.display = 'none';
     userId = 0;
 }

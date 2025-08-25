@@ -33,7 +33,7 @@ class ChatController extends Controller
         foreach ($data as $k => $datum) {
             $users = $relationMap[$datum['id']] ?? [];
             $data[$k]['users'] = implode("\n", $users);
-            $data[$k]['status'] = ChatModel::STATUS_MAP[$datum['status']];
+            $data[$k]['status'] = $datum['deleted_at'] ? 'DELETE' : ChatModel::STATUS_MAP[$datum['status']];
         }
 
         view('admin.chat.list', [
@@ -45,6 +45,7 @@ class ChatController extends Controller
             'total' => $total,
             'page' => $page,
             'size' => $size,
+            'modalTitle' => __('New Chat'),
         ]);
     }
 
@@ -77,6 +78,7 @@ class ChatController extends Controller
             'title' => 'Chat Info',
             'chat' => $chat,
             'members' => $members,
+            'selected' => json_encode(array_column($members, 'id')),
         ]);
     }
 
@@ -140,6 +142,7 @@ class ChatController extends Controller
     {
         // Get and validate input data
         $data = jsonData();
+        $id = $data['id'] ?? 0;
         $data['name'] = trim($data['name']);
         $data['users'] = array_unique($data['users']);
 
@@ -160,13 +163,17 @@ class ChatController extends Controller
 
         $model = new ChatModel();
         try {
-            // Attempt to create new chat
-            $chat = $model->newChat($data['name'], $data['users']);
+            if ($id) {
+                $chat = $model->updateById($id, ['name' => $data['name'], 'users_count' => count($data['users'])]);
+            } else {
+                // Attempt to create new chat
+                $chat = $model->newChat($data['name'], $data['users']);
+            }
 
             if ($chat) {
                 json([
                     'code' => 10000,
-                    'message' => 'Chat created successfully',
+                    'message' => 'ok',
                     'data' => $chat
                 ]);
             }
@@ -179,6 +186,42 @@ class ChatController extends Controller
             json([
                 'code' => 10003,
                 'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function lockChat()
+    {
+        $id = $this->validator->number($_POST, 'id');
+        $lock = $this->validator->string($_POST, 'lock') === 'true';
+
+        $model = new ChatModel();
+        if ($model->updateById($id, ['status' => $lock ? 0 : 1])) {
+            json([
+                'code' => 10000,
+                'message' => 'ok'
+            ]);
+        } else {
+            json([
+                'code' => 10002,
+                'message' => 'failed'
+            ]);
+        }
+    }
+
+    public function delete($id)
+    {
+        $model = new ChatModel();
+
+        if ($model->softDelete($id)) {
+            json([
+                'code' => 10000,
+                'message' => 'ok'
+            ]);
+        } else {
+            json([
+                'code' => 10002,
+                'message' => 'failed'
             ]);
         }
     }

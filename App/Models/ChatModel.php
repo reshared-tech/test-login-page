@@ -16,6 +16,22 @@ class ChatModel extends BaseModel
         self::CHAT_STATUS_STOP => '削除しました',
     ];
 
+    public function softDelete($id)
+    {
+        return $this->updateById($id, ['deleted_at' => date('Y-m-d H:i:s')]);
+    }
+
+    public function updateById($id, $data)
+    {
+        try {
+            [$sql, $val] = $this->parseUpdate('chats', $data);
+            $val['id'] = $id;
+            return $this->database->execute($sql . ' WHERE `id` = :id', $val);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
     /**
      * @throws Exception
      */

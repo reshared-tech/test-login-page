@@ -56,16 +56,6 @@
         </div>
     </div>
 </main>
-<div id="modal">
-    <div class="content" style="min-height: auto">
-        <div class="header">
-            <p id="question"></p>
-        </div>
-        <div class="footer">
-            <button onclick="confirm()" class="action-btn action-btn-delete">確認します</button>
-            <button onclick="cancel()" class="action-btn">取り消します</button>
-        </div>
-    </div>
-</div>
+<?php require APP_ROOT . '/views/admin/common/lock.modal.view.php' ?>
 <script src="assets/js/admin/user.js"></script>
 <?php require APP_ROOT . '/views/basic/foot.view.php' ?>

@@ -35,6 +35,13 @@ class Database
         return $this;
     }
 
+    public function execute($sql, $attributes = [])
+    {
+        $this->stmt = self::$pdo->prepare($sql);
+
+        return $this->stmt->execute($attributes);
+    }
+
     public function exec($sql)
     {
         return self::$pdo->exec($sql);

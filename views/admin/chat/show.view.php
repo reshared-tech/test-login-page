@@ -13,7 +13,9 @@
                 </div>
                 <div class="user-item">
                     <span>Status: </span>
-                    <?php if ($chat['status']): ?>
+                    <?php if ($chat['deleted_at']): ?>
+                        <span class="text-red">DELETED</span>
+                    <?php elseif ($chat['status']): ?>
                         <span class="text-green">Normal</span>
                     <?php else: ?>
                         <span class="text-red">Closed</span>
@@ -34,22 +36,30 @@
                 <div class="user-item">
                     <span>Members Count: </span>
                     <span><?= $chat['users_count'] ?></span>
-                    <span><button class="action-btn" onclick="manageMember(<?= $chat['id'] ?>)">管理メンバーリストです</button></span>
+                </div>
+                <div class="user-item">
+                    <?php if (!$chat['deleted_at']): ?>
+                        <?php if ($chat['status']): ?>
+                            <button class="action-btn action-btn-delete" onclick="lockChat()">Lock</button>
+                        <?php else: ?>
+                            <button class="action-btn" onclick="unLockChat()">UnLock</button>
+                        <?php endif ?>
+                        <button class="action-btn" onclick="manageMember()">編集します</button>
+
+                        <button class="action-btn action-btn-delete" onclick="deleteChat()">Delete</button>
+                    <?php endif ?>
                 </div>
             </div>
         </div>
     </div>
 </main>
-<div id="modal">
-    <div class="content" style="min-height: auto">
-        <div class="header">
-            <p id="question"></p>
-        </div>
-        <div class="footer">
-            <button onclick="confirm()" class="action-btn action-btn-delete">確認します</button>
-            <button onclick="cancel()" class="action-btn">取り消します</button>
-        </div>
-    </div>
-</div>
-<script src="assets/js/admin/chat/create.js"></script>
+<?php require APP_ROOT . '/views/admin/common/chat.model.view.php' ?>
+<?php require APP_ROOT . '/views/admin/common/lock.modal.view.php' ?>
+<script>
+    const theChatId = Number(<?= $chat['id'] ?? '' ?>);
+    const chatUserIds = JSON.parse('<?= $selected ?? '[]' ?>');
+    const theChatName = '<?= $chat['name'] ?? '' ?>';
+</script>
+<script src="assets/js/chat/create.js"></script>
+<script src="assets/js/admin/chat.js"></script>
 <?php require APP_ROOT . '/views/basic/foot.view.php' ?>
