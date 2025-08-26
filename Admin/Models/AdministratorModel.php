@@ -14,6 +14,25 @@ class AdministratorModel extends BaseModel
         ])->find();
     }
 
+    public function getLogTotal()
+    {
+        return $this->getTotal('admin_logs');
+    }
+
+    public function getLogList($page = 1, $size = 10)
+    {
+        return $this->getList('admin_logs', $page, $size);
+    }
+
+    public function getByIds($ids)
+    {
+        if (empty($ids)) {
+            return [];
+        }
+        $idStr = implode(',', $ids);
+        return $this->database->prepare("SELECT * FROM `administrators` WHERE `id` in ($idStr)")->findAll();
+    }
+
     public function getById($id)
     {
         if ($id == 1) {

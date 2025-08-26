@@ -32,6 +32,7 @@ $router->post('/api/upload', [\App\Controllers\ChatController::class, 'upload'])
 $router->get('/admin', [\Admin\Controllers\HomeController::class, 'dashboard']);
 $router->get('/admin/logout', [\Admin\Controllers\HomeController::class, 'logout']);
 $router->get('/admin/users', [\Admin\Controllers\UserController::class, 'index']);
+$router->get('/admin/logs', [\Admin\Controllers\HomeController::class, 'logs']);
 $router->get('/admin/users/:id', [\Admin\Controllers\UserController::class, 'show']);
 $router->get('/admin/api/users', [\Admin\Controllers\UserController::class, 'usersApiList']);
 $router->post('/admin/api/users/lock', [\Admin\Controllers\UserController::class, 'lockUser']);
