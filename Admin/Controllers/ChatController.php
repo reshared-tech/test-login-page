@@ -2,7 +2,6 @@
 
 namespace Admin\Controllers;
 
-use Admin\Models\AdministratorModel;
 use App\Models\ChatModel;
 use App\Models\UserModel;
 use Exception;
@@ -60,8 +59,7 @@ class ChatController extends Controller
             $user = $userModel->getUserById($chat['creator_id']);
             $chat['creator'] = 'User: ' . $user['name'];
         } else {
-            $adminModel = new AdministratorModel();
-            $admin = $adminModel->getById($chat['creator_id']);
+            $admin = $this->model->getById($chat['creator_id']);
             $chat['creator'] = 'Administrator: ' . $admin['name'];
         }
 
@@ -165,13 +163,18 @@ class ChatController extends Controller
         $model = new ChatModel();
         try {
             if ($id) {
+                $action = 'update chat room';
                 $chat = $model->updateChat($id, $data['name'], $data['users']);
             } else {
+                $action = 'create chat room';
                 // Attempt to create new chat
                 $chat = $model->newChat($data['name'], $data['users']);
             }
 
             if ($chat) {
+                // save admin action log
+                $this->saveLog($action, array_merge(['id' => $id], $data));
+
                 json([
                     'code' => 10000,
                     'message' => 'ok',
@@ -197,7 +200,11 @@ class ChatController extends Controller
         $lock = $this->validator->string($_POST, 'lock') === 'true';
 
         $model = new ChatModel();
-        if ($model->updateById($id, ['status' => $lock ? 0 : 1])) {
+        $data = ['status' => $lock ? 0 : 1];
+        if ($model->updateById($id, $data)) {
+            // save admin action log
+            $this->saveLog('lock-chat', array_merge(['id' => $id], $data));
+
             json([
                 'code' => 10000,
                 'message' => 'ok'
@@ -215,6 +222,9 @@ class ChatController extends Controller
         $model = new ChatModel();
 
         if ($model->softDelete($id)) {
+            // save admin action log
+            $this->saveLog('soft-delete-chat', ['id' => $id]);
+
             json([
                 'code' => 10000,
                 'message' => 'ok'

@@ -52,7 +52,11 @@ class UserController extends Controller
         $lock = $this->validator->string($_POST, 'lock') === 'true';
 
         $userModel = new UserModel();
-        if ($userModel->updateById($id, ['status' => $lock ? 0 : 1])) {
+        $data = ['status' => $lock ? 0 : 1];
+        if ($userModel->updateById($id, $data)) {
+            // save admin action log
+            $this->saveLog('lock-user', array_merge(['id' => $id], $data));
+
             json([
                 'code' => 10000,
                 'message' => 'ok'

@@ -15,11 +15,15 @@ class HomeController extends Controller
             'title' => 'dashboard'
         ]);
     }
+
     /**
      * Handle administrator logout
      */
     public function logout()
     {
+        // Add logout log
+        $this->saveLog('logout');
+
         // Remove authentication credentials
         Auth::removeAuth();
 

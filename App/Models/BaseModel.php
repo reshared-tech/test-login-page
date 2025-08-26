@@ -33,10 +33,27 @@ abstract class BaseModel
         return ["UPDATE `$table` SET $keyStr", $values];
     }
 
+    protected function parseInsert($table, $data)
+    {
+        if (empty($data)) {
+            throw new Exception('Inserts data is empty');
+        }
+        $value = [];
+        $result = [];
+        foreach ($data as $key => $val) {
+            $value[] = ":$key";
+            $result[$key] = $val;
+        }
+        $fields = '`' . implode('`,`', array_keys($data)) . '`';
+        $value = implode(',', $value);
+        $sql = "INSERT INTO `$table`($fields) VALUE ($value)";
+        return [$sql, $result];
+    }
+
     /**
      * @throws Exception
      */
-    protected function parseInsert($table, $data)
+    protected function parseInserts($table, $data)
     {
         if (empty($data)) {
             throw new Exception('Inserts data is empty');

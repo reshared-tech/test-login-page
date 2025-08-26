@@ -3,6 +3,7 @@
 namespace Admin\Controllers;
 
 use Admin\Models\AdministratorModel;
+use Exception;
 use Tools\Auth;
 use Tools\Language;
 use Tools\Validator;
@@ -10,6 +11,10 @@ use Tools\Validator;
 class Controller
 {
     protected $validator;
+    /**
+     * @var $model AdministratorModel
+     */
+    protected $model;
 
     public function __construct()
     {
@@ -22,6 +27,15 @@ class Controller
         $this->checkAuth();
 
         $this->validator = new Validator();
+
+        $this->initModel();
+    }
+
+    private function initModel()
+    {
+        if (!$this->model) {
+            $this->model = new AdministratorModel();
+        }
     }
 
     private function checkAuth()
@@ -34,16 +48,19 @@ class Controller
             $name = trim($_SERVER['PHP_AUTH_USER']);
             $password = trim($_SERVER['PHP_AUTH_PW']);
 
+            $this->initModel();
+
             if ($name === 'admin' && $password === 'admin') {
                 Auth::addAuth([
                     'id' => 1,
                     'name' => $name,
                 ]);
+
+                $this->saveLog('login');
                 return;
             }
 
-            $model = new AdministratorModel();
-            $data = $model->getByName($name);
+            $data = $this->model->getByName($name);
 
             if (empty($data)) {
                 $this->forbidden();
@@ -57,6 +74,17 @@ class Controller
                 'id' => $data['id'],
                 'name' => $data['name'],
             ]);
+
+            $this->saveLog('login');
+        }
+    }
+
+    protected function saveLog($action, $detail = [])
+    {
+        try {
+            $this->model->saveLog(authorizedUser('id'), $action, $detail);
+        } catch (Exception $e) {
+
         }
     }
 

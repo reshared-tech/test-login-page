@@ -87,7 +87,7 @@ class ChatModel extends BaseModel
         foreach ($userIds as $userId) {
             $inserts[] = ['chat_id' => $chatId, 'user_id' => $userId, 'created_at' => $now];
         }
-        [$sql, $data] = $this->parseInsert('chat_relations', $inserts);
+        [$sql, $data] = $this->parseInserts('chat_relations', $inserts);
         if (!$this->database->execute($sql, $data)) {
             throw new Exception('add relations failed');
         }
@@ -313,7 +313,7 @@ class ChatModel extends BaseModel
         }, $messageIds);
 
         try {
-            [$sql, $data] = $this->parseInsert('chat_message_read_logs', $data);
+            [$sql, $data] = $this->parseInserts('chat_message_read_logs', $data);
 
             return $this->database->prepare($sql, $data);
         } catch (Exception $e) {
