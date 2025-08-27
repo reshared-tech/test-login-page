@@ -6,13 +6,21 @@ use App\Models\ChatModel;
 use App\Models\UserModel;
 use Exception;
 
+/**
+ * Handles administrative operations for chat management
+ */
 class ChatController extends Controller
 {
+    /**
+     * Display the list of all chat data
+     * @return void
+     */
     public function index()
     {
         // Number of items per page
         $size = 10;
         // Get current page number from query parameters, default to 1
+        // Ensure page number is at least 1
         $page = max($this->validator->number($_GET, 'page', 1), 1);
 
         $model = new ChatModel();
@@ -49,12 +57,19 @@ class ChatController extends Controller
         ]);
     }
 
+    /**
+     * Display the detailed information of the specified chat and support editing, locking and unlocking
+     * @param $id
+     * @return void
+     */
     public function show($id)
     {
         $model = new ChatModel();
         $userModel = new UserModel();
+        // Get complete chat details by ID
         $chat = $model->getChatById($id, true);
 
+        // Determine creator information based on creator type
         if ($chat['creator_type']) {
             $user = $userModel->getUserById($chat['creator_id']);
             $chat['creator'] = 'User: ' . $user['name'];
@@ -63,9 +78,11 @@ class ChatController extends Controller
             $chat['creator'] = 'Administrator: ' . $admin['name'];
         }
 
+        // Get member information for the chat
         $members = $userModel->getUsersInfoByIds(
             $model->getUserIdsByChatId($id)
         );
+        // Generate avatars for each member
         foreach ($members as $k => $member) {
             $members[$k]['avatar'] = nameAvatar($member['name']);
         }
@@ -81,8 +98,13 @@ class ChatController extends Controller
         ]);
     }
 
+    /**
+     * Displays message history for a specific chat
+     * @return void
+     */
     public function messages()
     {
+        // Get and validate chat ID from request
         $chatId = $this->validator->number($_GET, 'id');
         if (empty($chatId)) {
             redirect('admin/chats');
@@ -97,13 +119,14 @@ class ChatController extends Controller
         $total = $model->getMessageTotal($chatId);
         $data = $model->getMessageList($chatId, $page, $size);
 
-        // Get read logs
+        // Get message read status information
         [$readMap, $usersCount, $userIds] = $model->getReadMap(array_column($data, 'id'), $chatId, true);
 
-        // Get users name
+        // Get usernames for display
         $userModel = new UserModel();
         $users = $userModel->getUsersNameByIds($userIds);
 
+        // Enhance message data with user information and read status
         foreach ($data as $k => $datum) {
             $data[$k]['username'] = $users[$datum['user_id']] ?? "({$datum['user_id']})";
 
@@ -133,18 +156,19 @@ class ChatController extends Controller
     }
 
     /**
-     * Create a new chat session between two users
+     * Create a new chat session width multi users
      *
      * @return void Returns JSON response
      */
     public function store()
     {
-        // Get and validate input data
+        // Get and validate input data from JSON request
         $data = jsonData();
         $id = $data['id'] ?? 0;
         $data['name'] = trim($data['name']);
         $data['users'] = array_unique($data['users']);
 
+        // Validate chat name
         if (empty($data['name'])) {
             json([
                 'code' => 10001,
@@ -152,7 +176,7 @@ class ChatController extends Controller
             ]);
         }
 
-        // Validate data structure
+        // Validate minimum number of users
         if (count($data['users']) < 2) {
             json([
                 'code' => 10001,
@@ -163,16 +187,18 @@ class ChatController extends Controller
         $model = new ChatModel();
         try {
             if ($id) {
+                // Update existing chat room
                 $action = 'update chat room';
                 $chat = $model->updateChat($id, $data['name'], $data['users']);
             } else {
+                // Create new chat room
                 $action = 'create chat room';
                 // Attempt to create new chat
                 $chat = $model->newChat($data['name'], $data['users']);
             }
 
             if ($chat) {
-                // save admin action log
+                // Log admin action
                 $this->saveLog($action, array_merge(['id' => $id], $data));
 
                 json([
@@ -194,15 +220,20 @@ class ChatController extends Controller
         }
     }
 
+    /**
+     * Lock or unlock a chat room
+     * @return void Returns JSON response
+     */
     public function lockChat()
     {
+        // Get and validate input parameters
         $id = $this->validator->number($_POST, 'id');
         $lock = $this->validator->string($_POST, 'lock') === 'true';
 
         $model = new ChatModel();
         $data = ['status' => $lock ? 0 : 1];
         if ($model->updateById($id, $data)) {
-            // save admin action log
+            // Log admin action
             $this->saveLog('lock-chat', array_merge(['id' => $id], $data));
 
             json([
@@ -217,6 +248,11 @@ class ChatController extends Controller
         }
     }
 
+    /**
+     * Soft delete a chat (mark as deleted)
+     * @param $id
+     * @return void Returns JSON response
+     */
     public function delete($id)
     {
         $model = new ChatModel();

@@ -2,12 +2,29 @@
 
 namespace Tools;
 
+/**
+ * Language localization utility class
+ * Manages application text translations (currently supports Japanese)
+ * Provides methods to set the active language and retrieve translated text
+ */
 class Language
 {
+    /**
+     * Active language configuration (stores translated text for the selected language)
+     * @var array
+     */
     static $config;
 
+    /**
+     * Language constant for Japanese (maps to the 'japanese' key in Languages array)
+     */
     const JP = 'japanese';
 
+    /**
+     * Language translation database
+     * Stores key-value pairs of original text (English) to translated text
+     * Currently only includes Japanese translations
+     */
     const Languages = [
         'japanese' => [
             'Welcome' => 'ようこそ',
@@ -61,45 +78,71 @@ class Language
         ],
     ];
 
+    /**
+     * Set the active language for the application
+     * Loads the corresponding translation set into $config
+     *
+     * @param string $config Language key (e.g., 'japanese' via self::JP)
+     * @return void
+     */
     public static function setLang($config)
     {
+        // Load translation set for the specified language; default to empty array if not found
         self::$config = self::Languages[$config] ?? [];
     }
 
+    /**
+     * Retrieve the translated text for a given original text
+     * Supports static text, dynamic text with placeholders (e.g., "%s must be at least %d characters"),
+     * numeric values, and arrays of text
+     *
+     * @param string|int|array $text Original text to translate (or array of texts)
+     * @return string|array Translated text (or array of translated texts)
+     */
     public static function show($text)
     {
+        // Return numeric values as-is (no translation needed)
         if (is_numeric($text)) {
             return $text;
         }
 
+        // Handle string input (main translation logic)
         if (is_string($text)) {
+            // Return direct translation if exact match exists in active language config
             if (isset(self::$config[$text])) {
                 return self::$config[$text];
             }
 
+            // Return original text if no active language config is loaded
             if (empty(self::$config)) {
                 return $text;
             }
 
+            // Handle dynamic text with placeholders (e.g., "%s must be at least %d characters")
             foreach (self::$config as $k => $v) {
+                // Skip entries without placeholders (%d or %w)
                 if (strpos($k, '%d') === false && strpos($k, '%w') === false) {
                     continue;
                 }
 
-                $pattern = str_replace('%s', '(.+)', $k);
-                $pattern = str_replace('%d', '(\d+)', $pattern);
-                $pattern = '/^' . $pattern . '$/';
+                // Convert translation key to regex pattern to match original text
+                $pattern = str_replace('%s', '(.+)', $k);  // Match string placeholders
+                $pattern = str_replace('%d', '(\d+)', $pattern);  // Match numeric placeholders
+                $pattern = '/^' . $pattern . '$/';  // Enforce full string match
 
+                // Check if original text matches the regex pattern
                 if (preg_match($pattern, $text, $matches)) {
-                    array_shift($matches);
-                    $result = self::show($matches);
-                    return vsprintf($v, $result);
+                    array_shift($matches);  // Remove full match from results (keep only placeholders)
+                    $result = self::show($matches);  // Translate placeholder values (if needed)
+                    return vsprintf($v, $result);  // Replace placeholders in translated text
                 }
             }
 
+            // Return original text if no translation found
             return $text;
         }
 
+        // Handle array input (translate each item in the array)
         foreach ($text as $k => $item) {
             $text[$k] = self::show($item);
         }
