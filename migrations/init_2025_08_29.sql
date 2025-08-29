@@ -1,15 +1,7 @@
-DROP TABLE IF EXISTS `migrations`;
-
-CREATE TABLE `migrations` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-  `migration` varchar(255) NOT NULL COMMENT 'migration name',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'primary index',
   `name` varchar(255) NOT NULL COMMENT 'username',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT 1 COMMENT 'user status',
   `email` varchar(255) NOT NULL COMMENT 'email',
   `password` varchar(255) NOT NULL COMMENT 'user password',
   `failed_count` tinyint(4) unsigned NOT NULL DEFAULT 0 COMMENT 'login failed times',
@@ -17,9 +9,8 @@ CREATE TABLE `users` (
   `updated_at` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT 'last update time',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_email` (`email`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DROP TABLE IF EXISTS `user_logs`;
 CREATE TABLE `user_logs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `user_id` bigint(20) unsigned NOT NULL COMMENT 'user id',
@@ -29,20 +20,8 @@ CREATE TABLE `user_logs` (
   `created_at` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT 'log time',
   PRIMARY KEY (`id`),
   KEY `idx_uid` (`user_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DROP TABLE IF EXISTS `administrators`;
-CREATE TABLE `administrators` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'primary index',
-  `name` varchar(255) NOT NULL COMMENT 'manager name',
-  `password` varchar(255) NOT NULL COMMENT 'manager password',
-  `created_at` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT 'user register time',
-  `updated_at` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT 'last update time',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq_name` (`name`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-DROP TABLE IF EXISTS `chats`;
 CREATE TABLE `chats` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `hash` varchar(50) NOT NULL COMMENT 'uniq hash',
@@ -58,9 +37,8 @@ CREATE TABLE `chats` (
   UNIQUE KEY `uniq_hash` (`hash`) USING BTREE,
   KEY `idx_status_ctime` (`status`,`created_at`) USING BTREE,
   KEY `idx_utime` (`updated_at`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DROP TABLE IF EXISTS `chat_relations`;
 CREATE TABLE `chat_relations` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary id',
   `user_id` bigint(20) unsigned NOT NULL COMMENT 'user id',
@@ -68,11 +46,10 @@ CREATE TABLE `chat_relations` (
   `created_at` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT 'join time',
   `deleted_at` datetime DEFAULT NULL COMMENT 'quit time',
   PRIMARY KEY (`id`),
-  KEY `idx_uid` (`user_id`) USING BTREE,
+  UNIQUE KEY `uniq_chat_user` (`user_id`,`chat_id`) USING BTREE,
   KEY `idx_chat_id` (`chat_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DROP TABLE IF EXISTS `chat_messages`;
 CREATE TABLE `chat_messages` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary id',
   `user_id` bigint(20) unsigned NOT NULL COMMENT 'user id',
@@ -84,9 +61,8 @@ CREATE TABLE `chat_messages` (
   PRIMARY KEY (`id`),
   KEY `idx_uid` (`user_id`) USING BTREE,
   KEY `idx_cid_time` (`chat_id`,`created_at`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DROP TABLE IF EXISTS `chat_message_read_logs`;
 CREATE TABLE `chat_message_read_logs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary id',
   `chat_id` bigint(20) unsigned NOT NULL COMMENT 'chat id',
@@ -94,6 +70,25 @@ CREATE TABLE `chat_message_read_logs` (
   `user_id` bigint(20) unsigned NOT NULL COMMENT 'read user id',
   `created_at` datetime NOT NULL COMMENT 'read time',
   PRIMARY KEY (`id`),
-  KEY `idx_cid` (`chat_id`) USING BTREE,
-  KEY `idx_mid_uid` (`user_id`,`message_id`) USING BTREE
+  UNIQUE KEY `idx_mid_uid` (`user_id`,`message_id`) USING BTREE,
+  KEY `idx_cid` (`chat_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=271 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `administrators` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'primary index',
+  `name` varchar(255) NOT NULL COMMENT 'manager name',
+  `password` varchar(255) NOT NULL COMMENT 'manager password',
+  `created_at` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT 'user register time',
+  `updated_at` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT 'last update time',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_name` (`name`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `admin_logs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `admin_id` bigint(20) unsigned NOT NULL DEFAULT 0 COMMENT 'administrator id',
+  `action` varchar(255) NOT NULL DEFAULT '' COMMENT 'action name',
+  `detail` text DEFAULT NULL COMMENT 'The original data of the impact',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() COMMENT 'log time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

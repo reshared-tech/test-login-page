@@ -54,7 +54,7 @@ class Router
             $uriPath = '/' . trim(str_replace(self::$basePath, '', $uriPath), '/');
         }
 
-        return $uriPath;
+        return rtrim($uriPath, '/');
     }
 
     /**
